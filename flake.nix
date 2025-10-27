@@ -22,16 +22,17 @@
 	};
 
 	outputs = inputs @ { self, nixpkgs, home-manager, ... }: let
-		locals   = if (builtins.pathExists ./flake.local.nix)
-		           then (import ./flake.local.nix)
+		locals   = if (builtins.pathExists ./locals.nix)
+		           then (import ./locals.nix)
 		           else {};
-		username = locals.username or "nixos";
 		system   = locals.system   or "x86_64-linux";
+		username = locals.username or "nixos";
+		pkgs     = nixpkgs.legacyPackages.${system};
 
 	in {
 
 		homeConfigurations.${username} = home-manager.lib.homeManagerConfiguration {
-			pkgs = nixpkgs.legacyPackages.${system};
+			inherit pkgs;
 			modules = [
 				./home.nix
 			];
