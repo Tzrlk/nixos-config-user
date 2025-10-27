@@ -22,9 +22,11 @@
 	};
 
 	outputs = inputs @ { self, nixpkgs, home-manager, ... }: let
-#		locals = import ./flake.local.nix or {}
-		username = "nixos";
-		system = "x86_64-linux";
+		locals   = if (builtins.pathExists ./flake.local.nix)
+		           then (import ./flake.local.nix)
+		           else {};
+		username = locals.username or "nixos";
+		system   = locals.system   or "x86_64-linux";
 
 	in {
 
