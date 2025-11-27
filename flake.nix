@@ -1,46 +1,81 @@
 {
-	description = "Personal user (not system) config for nixos.";
+	description = "NixOS User Configuration";
 
 	inputs = {
-		nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
+
+		nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
+
+		system-manager = {
+			url = "github:numtide/system-manager/7865b4a";
+			inputs.nixpkgs.follows = "nixpkgs";
+		};
 
 		home-manager = {
 			url = "github:nix-community/home-manager/release-25.05";
 			inputs.nixpkgs.follows = "nixpkgs";
 		};
 
-		nix-direnv = {
-			url = "github:nix-community/nix-direnv";
+		nix-flake-tests = {
+			url = "github:antifuchs/nix-flake-tests";
 			inputs.nixpkgs.follows = "nixpkgs";
 		};
 
-		direnv-instant = {
-			url = "github:Mic92/direnv-instant";
+		flake-utils = {
+			url = "github:numtide/flake-utils";
 			inputs.nixpkgs.follows = "nixpkgs";
 		};
 
 	};
 
-	outputs = inputs @ { self, nixpkgs, home-manager, ... }: let
-		locals   = if (builtins.pathExists ./locals.nix)
-		           then (import ./locals.nix)
-		           else {};
-		system   = locals.system   or "x86_64-linux";
-		username = locals.username or "nixos";
-		pkgs     = nixpkgs.legacyPackages.${system};
+	outputs = inputs @ {
+ 		self,
+		nixpkgs,
+		system-manager,
+		home-manager,
+		flake-utils,
+		nix-flake-tests,
+	}: flake-utils.lib.eachDefaultSystem (system: let
+
+		lib = nixpkgs.lib;
+
+		listCfg = dir: lib.mapAttrsToList
+			(file: type: dir + "/${file}")
+			(lib.filterAttrs
+				(file: type: type != "directory" && (lib.hasSuffix ".nix" file))
+				(builtins.readDir dir));
+
+		pkgs = nixpkgs.legacyPackages.${system};
 
 	in {
 
-		homeConfigurations.${username} = home-manager.lib.homeManagerConfiguration {
-			inherit pkgs;
-			modules = [
-				./home.nix
+		# Development shell
+		devShells.default = pkgs.mkShell {
+			name = "nix devShell";
+			buildInputs = with pkgs; [
+				nixd
 			];
-			extraSpecialArgs = {
-				inherit inputs self;
+		};
+
+		# Home config.
+		homeConfigurations = {
+			tzrlk = home-manager.lib.homeManagerConfiguration {
+				inherit pkgs;
+				modules = listCfg ./home;
+				extraSpecialArgs = {
+					inherit inputs;
+				};
 			};
 		};
-	
-	};
 
+ 		# Flake tests.
+		checks = {
+			unit = nix-flake-tests.lib.check {
+				inherit pkgs;
+				tests = {
+					placeholder = { expected = 1; expr = 1; };
+				};
+			};
+		};
+
+	});
 }

@@ -1,0 +1,9 @@
+= NixOS: Prometheus
+
+Sets up a home server setup in NixOS.
+
+# TODO
+
+* [ ] remove all unnecessary ports from firewall.
+* [ ] get komga up and running
+* [ ] get phone able to find prometheus

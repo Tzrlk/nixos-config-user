@@ -1,7 +1,9 @@
-# Misc
-*.bak
-*.jsonl
 *.log
 
 # NixOS
-result
+/result
+hardware-configuration.nix
+
+# IntelliJ
+.idea/
+*.iml
