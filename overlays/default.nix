@@ -1,5 +1,4 @@
-final: prev: import prev {
-	nixpkgs = import prev.nixpkgs {
-		overlays = [ ./nixpkgs ];
-	};
-}
+final: prev: {}
+	// import ./allow-unfree.nix final prev
+	// import ./allow-unfree-jetbrains.nix final prev
+	// import ./git-libsecret.nix final prev

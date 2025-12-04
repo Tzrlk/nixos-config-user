@@ -4,7 +4,7 @@
 	inputs = {
 
 		nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
-		systems.url = "github:nix-systems/default-linux";
+		systems.url = "github:nix-systems/x86_64-linux";
 		nix-flake-tests.url = "github:antifuchs/nix-flake-tests";
 
 		flake-utils = {
@@ -37,67 +37,91 @@
 
 	outputs = inputs @ {
  		self,
+ 		flake-utils,
 		home-manager,
-		flake-utils,
 		nix-flake-tests,
 		...
-	}: flake-utils.lib.eachDefaultSystem (system: let
+	}: (let
 
-		pkgs = import inputs.nixpkgs {
-			inherit system;
-			overlays = [
-				self.overlays.nixpkgs
-			];
-		};
+		# Used for iterating over the selected systems.
+		defaultSystems = flake-utils.lib.defaultSystems;
+		eachSystem = flake-utils.lib.eachSystemPassThrough defaultSystems;
+
+		# Resolve any local overrides.
+		locals =
+			if builtins.pathExists ./locals.nix
+			then import ./locals.nix
+			else {};
+		system' = locals.system
+			or (builtins.head inputs.system);
+		username = locals.username
+			or "nixos";
+
+		pkgs = eachSystem (system: {
+			${system} = import inputs.nixpkgs {
+				inherit system;
+				overlays = [
+					self.overlays.default
+				];
+			};
+		});
 
 	in {
 
 		#######################################################################
-		# Development shell
-		devShells.default = pkgs.mkShell {
-			name = "nix devShell";
-			buildInputs = with pkgs; [
-				nixd
-			];
-		};
-
-		#######################################################################
 		# Expose overlays
 		overlays = {
-			nixpkgs = ./overlays/nixpkgs;
-			default = ./overlays;
+			allow-unfree           = import ./overlays/allow-unfree.nix;
+			allow-unfree-jetbrains = import ./overlays/allow-unfree-jetbrains.nix;
+			git-libsecret          = import ./overlays/git-libsecret.nix;
+			default                = import ./overlays;
 		};
 
 		#######################################################################
 		# Exposing the config directly as modules.
 		nixosModules = {
 			default = self.nixosModules.home;
-			home    = ./home;
+			home    = import ./home;
 		};
 
 		#######################################################################
-		# Home config.
+		# Home configs for applying config directly.
 		homeConfigurations = {
-			tzrlk   = self.homeConfigurations.default;
-			default = home-manager.lib.homeManagerConfiguration {
-				inherit pkgs;
-				modules = [ self.nixosModules.home ];
+			default = self.homeConfigurations.${system'};
+		} // eachSystem (system: {
+			${system} = home-manager.lib.homeManagerConfiguration {
+				pkgs = pkgs.${system};
+				modules = [
+					({ ... }: { home.username = username; })
+					self.nixosModules.home
+				];
 				extraSpecialArgs = {
 					inherit inputs;
 				};
 			};
-		};
+		});
+
+		#######################################################################
+		# Development shell
+		devShells = eachSystem (system: {
+			${system}.default = pkgs.${system}.mkShell {
+				name = "nix devShell";
+				buildInputs = [
+#					pkgs.${system}.nixd
+				];
+			};
+		});
 
 		#######################################################################
  		# Flake tests.
-		checks = {
-			unit = nix-flake-tests.lib.check {
-				inherit pkgs;
+		checks = eachSystem (system: {
+			${system}.unit = nix-flake-tests.lib.check {
+				pkgs = pkgs.${system};
 				tests = {
-					placeholder = { expected = 1; expr = 1; };
+					placeholder = { expected = 0; expr = 1; };
 				};
 			};
-		};
+		});
 
 	});
 }

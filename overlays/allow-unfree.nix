@@ -1,14 +1,12 @@
 final: prev: {
-
-	config = prev.config.override {
+	config = prev.config // {
 
 		allowUnfreePredicate = pkg:
 			builtins.elem
 				(pkg.pname or (builtins.parseDrvName pkg.name).name)
-				final.allowUnfreeList;
+				final.config.allowUnfreeList;
 
-		allowUnfreeList = prev.allowUnfreeList or [];
+		allowUnfreeList = prev.config.allowUnfreeList or [];
 
 	};
-
 }
