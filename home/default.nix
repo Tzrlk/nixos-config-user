@@ -1,89 +1,81 @@
-{ config, inputs, pkgs, ... }: rec {
+{ config, inputs, ... }: {
 
-	# Explicit specification speeds up evaluation.
-	# TODO: Turn this into a make script or something.
 	imports = [
 		./dev-lang
 		./dev-tools
 		./sys-tools
 	];
 
-	home = {
+	config = {
 
-		# Home-manager config compatibility
-		stateVersion = "25.05";
+		home = {
 
-		# User details
-		homeDirectory = "/home/${config.home.username}";
+			# Home-manager config compatibility
+			stateVersion = "25.05";
 
-		# User-specific packages
-		packages = (with pkgs; [
-			antlr4_12
-			curl
-			nixd
-		]) ++ (with inputs; [
-			system-manager
-		]);
+			# User details
+			homeDirectory = "/home/${config.home.username}";
 
-		file = {
-			# Misc scripts. Maybe this should be in xdg or outputs?
-			# TODO: Look into programs.script-directory.
-			"scripts".source = ./sys-tools/scripts;
+			# User-specific packages
+			packages = [
+				inputs.system-manager
+			];
+
 		};
 
-	};
+		# Let home-manager manage itself.
+		programs.home-manager.enable = true;
 
-	manual = {
-		json.enable = true; # <profile>/share/doc/home-manager/options.json
-		manpages.enable = true;
-	};
-
-	nix = {
-
-		# A declarative alternative to Nix channels. Whereas with stock
-		# channels, you would register URLs and fetch them into the Nix store
-		# with nix-channel(1), this option allows you to register the store
-		# path directly. One particularly useful example is registering flake
-		# inputs as channels.
-		channels = inputs;
-
-		gc = {
-			automatic  = true;
-			dates      = "weekly";
-			persistent = true;
+		manual = {
+			json.enable = true; # <profile>/share/doc/home-manager/options.json
+			manpages.enable = true;
 		};
 
-		# Adds new directories to the Nix expression search path.
-		# Used by Nix when looking up paths in angular brackets
-		# (e.g. <nixpkgs>).
-		nixPath = [
-			"nixpkgs=${inputs.nixpkgs}"
-		];
+		nix = {
 
-		# User level flake registry.
-		registry = {
-			nixpkgs.flake = inputs.nixpkgs;
+			# A declarative alternative to Nix channels. Whereas with stock
+			# channels, you would register URLs and fetch them into the Nix store
+			# with nix-channel(1), this option allows you to register the store
+			# path directly. One particularly useful example is registering flake
+			# inputs as channels.
+			channels = inputs;
+
+			gc = {
+				automatic  = true;
+				dates      = "weekly";
+				persistent = true;
+			};
+
+			# Adds new directories to the Nix expression search path.
+			# Used by Nix when looking up paths in angular brackets
+			# (e.g. <nixpkgs>).
+			nixPath = [
+				"nixpkgs=${inputs.nixpkgs}"
+			];
+
+			# User level flake registry.
+			registry = {
+				nixpkgs.flake = inputs.nixpkgs;
+			};
+
+			# https://nix-community.github.io/home-manager/options.xhtml#opt-nix.settings
+			settings = {};
+
 		};
 
-		# https://nix-community.github.io/home-manager/options.xhtml#opt-nix.settings
-		settings = {};
+		# Reload systemd when config changes.
+		systemd.user = {
+			startServices = "sd-switch";
+		};
+
+		# NOTE: Wayland config is just customisation of the systemd trigger, and
+		#       configuring a window manager.
+
+		# NOTE: XSession is the X11 display config, and is in competition to
+		#       wayland. WSLg uses wayland/weston, so this should generally be
+		#       avoided.
 
 	};
-
-	# Let home-manager manage itself.
-	programs.home-manager.enable = true;
-
-	# Reload systemd when config changes.
-	systemd.user = {
-		startServices = "sd-switch";
-	};
-
-	# NOTE: Wayland config is just customisation of the systemd trigger, and
-	#       configuring a window manager.
-
-	# NOTE: XSession is the X11 display config, and is in competition to
-	#       wayland. WSLg uses wayland/weston, so this should generally be
-	#       avoided.
 
 }
 

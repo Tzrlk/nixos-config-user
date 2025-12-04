@@ -1,4 +1,10 @@
-{ pkgs, jetbrains-plugins, ... }: let
+{ pkgs, inputs, system, ... }: let
+
+	jetbrains-plugins = {
+		plugins = inputs.nix-jetbrains-plugins.plugins.${system};
+		lib     = inputs.nix-jetbrains-plugins.lib.${system};
+	};
+
 	buildIde = jetbrains-plugins.lib.buildIdeWithPlugins pkgs.jetbrains;
 
 	# https://github.com/theCapypara/nix-jetbrains-plugins/blob/main/generated/ides/idea-ultimate-2025.2.4.json
@@ -60,6 +66,5 @@ in {
 			idea-ultimate
 		];
 	};
-
 
 }
