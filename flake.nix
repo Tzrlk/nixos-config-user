@@ -4,25 +4,15 @@
 	inputs = {
 
 		nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
-
-		system-manager = {
-			url = "github:numtide/system-manager/7865b4a";
-			inputs.nixpkgs.follows = "nixpkgs";
-		};
+		nix-flake-tests.url = "github:antifuchs/nix-flake-tests";
 
 		home-manager = {
 			url = "github:nix-community/home-manager/release-25.05";
 			inputs.nixpkgs.follows = "nixpkgs";
 		};
 
-		nix-flake-tests = {
-			url = "github:antifuchs/nix-flake-tests";
-			inputs.nixpkgs.follows = "nixpkgs";
-		};
-
 		flake-utils = {
 			url = "github:numtide/flake-utils";
-			inputs.nixpkgs.follows = "nixpkgs";
 		};
 
 	};
@@ -30,7 +20,6 @@
 	outputs = inputs @ {
  		self,
 		nixpkgs,
-		system-manager,
 		home-manager,
 		flake-utils,
 		nix-flake-tests,
@@ -55,6 +44,8 @@
 				nixd
 			];
 		};
+
+		modules.default = ./home;
 
 		# Home config.
 		homeConfigurations = {

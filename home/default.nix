@@ -1,4 +1,4 @@
-{ inputs, pkgs, ... }: rec {
+{ config, inputs, pkgs, ... }: rec {
 
 	# Explicit specification speeds up evaluation.
 	# TODO: Turn this into a make script or something.
@@ -8,16 +8,13 @@
 		./sys-tools
 	];
 
-	# Add more compatibility for ubuntu.
-	targets.genericLinux.enable = true;
-
 	home = {
 
 		# Home-manager config compatibility
 		stateVersion = "25.05";
 
 		# User details
-		homeDirectory = "/home/${home.username}";
+		homeDirectory = "/home/${config.home.username}";
 
 		# User-specific packages
 		packages = (with pkgs; [

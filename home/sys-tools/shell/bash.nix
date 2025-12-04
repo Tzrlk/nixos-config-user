@@ -19,10 +19,10 @@
 		];
 
 		# All shells.
-		bashrcExtra = builtins.readFile ./.bashrc;
+		bashrcExtra = builtins.readFile ./bashrc.sh;
 
 		# Login shells.
-		profileExtra = builtins.readFile ./.profile;
+		profileExtra = builtins.readFile ./profile.sh;
 
 	};
 

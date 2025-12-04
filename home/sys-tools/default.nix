@@ -8,8 +8,8 @@
 		./ssh
 		./taskwarrior
 		./xdg
-		./jq
-		./less
-		./man
+		./jq.nix
+		./less.nix
+		./man.nix
 	];
 }
