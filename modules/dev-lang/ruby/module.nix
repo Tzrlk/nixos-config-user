@@ -1,5 +1,4 @@
-{ inputs, lib, config, ... }: let
-	system = "x86_64-linux"; # TODO: Get this from somewhere smarter.
+{ inputs, lib, config, system, ... }: let
 
 	# Back-reference to actually defined config.
 	cfg = config.applications.ruby;

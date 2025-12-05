@@ -2,43 +2,57 @@
 
 ROOT_DIR := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 
-CMD_NIX ?= nix \
-	--extra-experimental-features 'flakes nix-command' \
-	--accept-flake-config
+CMD_NIX ?= nix
 CMD_HOME_MANAGER ?= $(shell command -v home-manager \
 	|| echo "${CMD_NIX} run 'github:nix-community/home-manager' --")
 
-USER ::= m811632
-NAME ::= NZ8797LP5474
+SYSTEM ?= x86_64-linux
 
-FILES_HOME  := $(shell find ./home -type f)
-FILES_UTILS := $(shell find ./utils -type f)
+## NIX ########################################################################
 
-debug:
-	@echo "home-manager:   ${CMD_HOME_MANAGER}"
+define .nix
+${CMD_NIX} ${1} \
+	--extra-experimental-features 'flakes nix-command' \
+	--accept-flake-config
+endef
 
-## MAIN #######################################################################
-EXEC ?= switch
+nix-%:
+	$(call .nix,${*})
 
-home: \
-		flake.nix \
-		${FILES_HOME} \
-		${FILES_UTILS}
-	@${CMD_HOME_MANAGER} ${EXEC} \
-		--option accept-flake-config true \
-		--flake .\#${USER}
-.PHONY: home
+repl: .ALWAYS
+	$(call .nix,${*})
 
-###############################################################################
+develop: .ALWAYS
+	$(call .nix,${*})
 
-## CHECK ######################################################################
+## FLAKE ######################################################################
 
-#: Runs flake tests and assertions.
-check: flake.lock
-	@${CMD_NIX} flake check
-.PHONY: check
+define .nix-flake
+$(call .nix,flake ${1})
+endef
 
-###############################################################################
+flake-%: .ALWAYS
+	$(call .nix-flake,${*})
+
+show: .ALWAYS
+	$(call .nix-flake,${@})
+
+## HOME #######################################################################
+
+define .home
+${CMD_HOME_MANAGER} ${1} \
+	--option accept-flake-config true \
+	--flake .\#${SYSTEM}
+endef
+
+home-%: .ALWAYS
+	$(call .home,${*})
+
+build: .ALWAYS
+	$(call .home,${@})
+
+switch: .ALWAYS
+	$(call .home,${@})
 
 ## SETUP ######################################################################
 
@@ -67,4 +81,6 @@ setup: \
 ## META #######################################################################
 .ONESHELL:
 .ALWAYS:
+MAKEFLAGS += --no-builtin-rules
+MAKEFLAGS += --no-builtin-variables
 ###############################################################################
