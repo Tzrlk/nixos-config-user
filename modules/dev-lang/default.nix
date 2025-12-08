@@ -6,5 +6,6 @@
 		./python
 		./ruby
 		./scala
+		./terraform
 	];
 }
