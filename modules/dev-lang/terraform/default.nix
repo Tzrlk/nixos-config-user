@@ -16,6 +16,9 @@
 			tflint
 			tflint-plugins.tflint-ruleset-aws
 
+			# Tool for handling complex migrations
+			tfmigrate
+
 		];
 
 	};
