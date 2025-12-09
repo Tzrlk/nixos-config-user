@@ -3,6 +3,9 @@
 
 		home.packages = with pkgs; [
 
+			# Terraform config synthesis
+			cdktf-cli
+
 			# The official CLI
 			terraform
 
@@ -11,6 +14,9 @@
 
 			# Official language server
 			terraform-ls
+
+			# Tool for handling complex projects
+			terragrunt
 
 			# Linting tool + rulesets.
 			tflint
