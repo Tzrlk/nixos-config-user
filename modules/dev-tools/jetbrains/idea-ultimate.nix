@@ -4,56 +4,57 @@
 		description = concatStringsSep "" [
 			"Local configuration for installation of IntelliJ IDEA Ultimate."
 		];
-		type    = types.submodule;
 		default = {};
-		options = {
+		type    = types.submodule ({ ... }: {
+			options = {
 
-			vmoptions = mkOption {
-				description = concatStringsSep "" [
-					"Values to populate $IDEA_HOME/idea64.vmoptions with."
-				];
-				type = types.nullOr(types.listOf(types.string));
-				default = null;
-				example = [
-					"-Dide.managed.by.toolbox=false"
-					"-Xmx1735m"
-				];
+				vmoptions = mkOption {
+					description = concatStringsSep "" [
+						"Values to populate $IDEA_HOME/idea64.vmoptions with."
+					];
+					type = with types; nullOr (listOf str);
+					default = null;
+					example = [
+						"-Dide.managed.by.toolbox=false"
+						"-Xmx1735m"
+					];
+				};
+
+				plugins = mkOption {
+					description = concatStringsSep "" [
+						"IDs of the plugins to install with the IDE."
+					];
+					type = with types; listOf str;
+					default = [
+						"com.intellij.kubernetes"
+						"com.intellij.properties"
+						"com.intellij.swagger"
+						"Docker"
+						"name.kropp.intellij.makefile"
+						"net.sjrx.intellij.plugins.systemdunitfiles"
+						"nix-idea"
+						"org.editorconfig.editorconfigjetbrains"
+						"org.intellij.plugins.hcl"
+						"org.jetbrains.idea.maven"
+						"org.jetbrains.kotlin"
+						"org.jetbrains.plugins.github"
+						"org.jetbrains.plugins.remote-run"
+						"org.jetbrains.plugins.rest"
+						"org.jetbrains.plugins.ruby"
+						"org.jetbrains.plugins.ruby-chef"
+						"org.jetbrains.plugins.terminal"
+						"org.jetbrains.plugins.yaml"
+						"org.jetbrains.security.package-checker"
+						"org.sonarlint.idea"
+						"org.toml.lang"
+						"PythonCore"
+						"Pythonid"
+						"ru.adelf.idea.dotenv"
+					];
+				};
+
 			};
-
-			plugins = mkOption {
-				description = concatStringsSep "" [
-					"IDs of the plugins to install with the IDE."
-				];
-				type = types.listOf(types.string);
-				default = [
-					"com.intellij.kubernetes"
-					"com.intellij.properties"
-					"com.intellij.swagger"
-					"Docker"
-					"name.kropp.intellij.makefile"
-					"net.sjrx.intellij.plugins.systemdunitfiles"
-					"nix-idea"
-					"org.editorconfig.editorconfigjetbrains"
-					"org.intellij.plugins.hcl"
-					"org.jetbrains.idea.maven"
-					"org.jetbrains.kotlin"
-					"org.jetbrains.plugins.github"
-					"org.jetbrains.plugins.remote-run"
-					"org.jetbrains.plugins.rest"
-					"org.jetbrains.plugins.ruby"
-					"org.jetbrains.plugins.ruby-chef"
-					"org.jetbrains.plugins.terminal"
-					"org.jetbrains.plugins.yaml"
-					"org.jetbrains.security.package-checker"
-					"org.sonarlint.idea"
-					"org.toml.lang"
-					"PythonCore"
-					"Pythonid"
-					"ru.adelf.idea.dotenv"
-				];
-			};
-
-		};
+		});
 	};
 
 	config = let
