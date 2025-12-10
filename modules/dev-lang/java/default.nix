@@ -1,8 +1,14 @@
 { config, pkgs, lib, ... }: {
+	config = {
 
-	programs.java = {
-		enable = false; # TODO
-		package = pkgs.jdk;
+		programs.java = {
+			enable = false; # TODO
+			package = pkgs.jdk;
+		};
+
+		home.sessionVariables = {
+
+		};
+
 	};
-
 }

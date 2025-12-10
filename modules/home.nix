@@ -3,6 +3,8 @@
 
 		home = {
 
+			preferXdgDirectories = true;
+
 			# User-specific packages
 			packages = [
 				inputs.system-manager

@@ -9,6 +9,7 @@
 
 		file = {
 			".gemrc".source = ./.gemrc;
+			".bashrc.d/10-rbenv.sh".source = ./rbenv-activation.sh;
 		};
 
 	};
