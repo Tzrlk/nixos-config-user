@@ -42,6 +42,7 @@ in {
 		vim-lsp
 		vim-ps1
 		vim-ruby
+		vim-shellcheck
 	];
 
 }
