@@ -4,6 +4,7 @@
 		./golang
 		./java
 		./k8s
+		./kotlin
 		./nodejs
 		./python
 		./ruby
