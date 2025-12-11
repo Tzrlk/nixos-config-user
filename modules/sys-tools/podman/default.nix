@@ -1,36 +1,55 @@
 { pkgs, ... }: {
 
-	# NOTE: Required "shadow" package included in system config to ensure
-	#       correct permissions.
+	config = {
 
-	# https://nix-community.github.io/home-manager/options.xhtml#opt-services.podman.enable
-	services.podman = {
-		enable = true;
-		package = pkgs.podman;
-		enableTypeChecks = true;
+		home.packages = with pkgs; [
 
-		# https://nix-community.github.io/home-manager/options.xhtml#opt-services.podman.autoUpdate.enable
-		autoUpdate = {
-			enable = false; # default
-			onCalendar = "Sun *-*-* 00:00"; # default
-		};
+			# Docker compose but with podman.
+			podman-compose
 
-		# https://nix-community.github.io/home-manager/options.xhtml#opt-services.podman.settings.containers
-		settings = {
+			# Used to handle uid/gid mapping.
+			# NOTE: Needs the following commands to be run after changing:
+			#       * `sudo setcap cap_setgid+eip "$(readlink -f $(which newgidmap))"`
+			#       * `sudo setcap cap_setuid+eip "$(readlink -f $(which newuidmap))"`
+			shadow
 
-			# containers.conf configuration
-			containers = {};
+		];
 
-			# mounts.conf configuration
-#			mounts = []; << missing
+		# https://nix-community.github.io/home-manager/options.xhtml#opt-services.podman.enable
+		services.podman = {
+			enable = true;
+			package = pkgs.podman;
+			enableTypeChecks = true;
 
-			# storage.conf configuration
-			storage = {};
+			# https://nix-community.github.io/home-manager/options.xhtml#opt-services.podman.autoUpdate.enable
+			autoUpdate = {
+				enable = false; # default
+				onCalendar = "Sun *-*-* 00:00"; # default
+			};
 
-			registries = {
-				search = [
-					"docker.io"
-				];
+			# https://nix-community.github.io/home-manager/options.xhtml#opt-services.podman.settings.containers
+			settings = {
+
+				# containers.conf configuration
+				containers = {
+					compose_warning_logs = false;
+					compose_providers = [
+						"${pkgs.podman-compose}/bin/podman-compose"
+					];
+				};
+
+				# mounts.conf configuration
+	#			mounts = []; << missing
+
+				# storage.conf configuration
+				storage = {};
+
+				registries = {
+					search = [
+						"docker.io"
+					];
+				};
+
 			};
 
 		};
