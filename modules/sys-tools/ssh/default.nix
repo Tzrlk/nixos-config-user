@@ -1,4 +1,10 @@
 { ... }: {
+
+	imports = [
+		./sshm
+		./ssh-agent.nix
+	];
+
 	config = {
 
 		# https://nix-community.github.io/home-manager/options.xhtml#opt-programs.ssh.enable
@@ -21,6 +27,15 @@
 				controlPersist      = "no";
 			};
 
+		};
+
+		programs.sshm = {
+			enable = true;
+			config = {
+				key_bindings = {
+					disable_esc_quit = true;
+				};
+			};
 		};
 
 	};
