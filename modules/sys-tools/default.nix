@@ -4,6 +4,7 @@
 		./edge
 		./gnome-keyring
 		./gpg
+		./keepass
 		./nixos
 		./podman
 		./shell
