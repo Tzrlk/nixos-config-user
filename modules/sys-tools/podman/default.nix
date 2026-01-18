@@ -32,10 +32,12 @@
 
 				# containers.conf configuration
 				containers = {
-					compose_warning_logs = false;
-					compose_providers = [
-						"${pkgs.podman-compose}/bin/podman-compose"
-					];
+					engine = {
+						compose_warning_logs = false;
+						compose_providers = [
+							"${pkgs.podman-compose}/bin/podman-compose"
+						];
+					};
 				};
 
 				# mounts.conf configuration
