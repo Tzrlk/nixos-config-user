@@ -1,6 +1,8 @@
 { pkgs, ... }: {
+
 	config = {
 
+		# TODO: Terraform providers?
 		home.packages = with pkgs; [
 
 			# Terraform config synthesis
@@ -27,5 +29,14 @@
 
 		];
 
+		# Enable libsecret integration via secret-tool.
+		home.file = {
+			".local/bin/terraform-credentials-libsecret" = {
+				source = ./terraform-credentials-libsecret.sh;
+				executable = true;
+			};
+		};
+
 	};
+
 }
