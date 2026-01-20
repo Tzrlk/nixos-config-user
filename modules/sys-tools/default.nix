@@ -11,7 +11,6 @@
 		./ssh
 		./taskwarrior
 		./xdg
-		./jq.nix
 		./less.nix
 		./man.nix
 	];

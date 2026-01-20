@@ -1,6 +1,7 @@
 { pkgs, ... }: {
 
 	imports = [
+		./data
 		./editorconfig.nix
 		./git
 		./jetbrains
