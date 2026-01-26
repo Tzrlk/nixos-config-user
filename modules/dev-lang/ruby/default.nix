@@ -1,28 +1,10 @@
-{ inputs, lib, pkgs, ... }: let
-
-	ruby = pkgs.ruby_3_4.withPackages (rpkgs: with rpkgs; [
-#		gel
-	]);
-
-in {
+{ ... }: {
 
 	imports = [
-#		./module.nix
+		./rbenv.nix
 	];
 
-	config = {
-		home.packages = [ ruby ];
+	# We don't want to install a system ruby, because it overrides whatever
+	# rbenv does. Better to just handle everything with rbenv instead.
 
-#		applications.ruby = {
-#			enabled = true;
-#			version = "3";
-#			gems    = known: with known; [
-#				gel
-#			];
-#		};
-
-		# TODO: Run gel setup on profile start
-		#       `eval "$(gel shell-setup)"`
-
-	};
 }
