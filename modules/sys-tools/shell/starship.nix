@@ -9,7 +9,15 @@
 	programs.starship = {
 		enable = true;
 		settings = {
+			command_timeout = 1000; # 500 (slow ruby)
 #			add_newline = true; # Already done via PS1
+
+			ruby = {
+				detect_extensions = [ "rb" "rbs" ];
+				detect_files      = [ "Gemfile" "Rakefile" ".ruby-version" ];
+				symbol            = "[💎](red) ";
+			};
+
 		};
 	};
 
