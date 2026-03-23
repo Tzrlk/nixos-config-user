@@ -3,7 +3,10 @@
 	home = {
 		shell.enableBashIntegration = true;
 		file = {
-			".bashrc.d".source = ./.bashrc.d;
+			".bashrc.d" = {
+				source = ./.bashrc.d;
+				recursive = true;
+			};
 		};
 	};
 
