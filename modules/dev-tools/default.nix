@@ -1,6 +1,7 @@
 { pkgs, ... }: {
 
 	imports = [
+		./cloud
 		./data
 		./editorconfig.nix
 		./git
