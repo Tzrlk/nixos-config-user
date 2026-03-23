@@ -4,11 +4,6 @@
 
 		home = {
 
-			sessionPath = [
-				"\${XDG_DATA_HOME}/gem/ruby/3.1.0/bin"
-				"\${XDG_DATA_HOME}/gem/ruby/3.2.0/bin"
-			];
-
 			file = {
 				".gemrc".source = lib.mkDefault ./gemrc.yml;
 	#			".bashrc.d/10-rbenv.sh".source = ./rbenv-activation.sh;

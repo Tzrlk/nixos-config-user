@@ -1,12 +1,22 @@
 { pkgs, ... }: {
 
 	config = {
+
 		home.packages = with pkgs; [
 
-			# RbEnv for nodejs, essentially.
-			nodeenv
+			# Fast Node Manager (nvm but faster).
+			fnm
 
 		];
+
+		home.file = {
+
+			".bashrc.d/fnm-init.sh" = {
+				source = ./fnm-init.sh;
+			};
+
+		};
+
 	};
 
 }
