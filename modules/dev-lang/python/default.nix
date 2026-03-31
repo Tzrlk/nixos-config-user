@@ -8,6 +8,9 @@
 			# Because it isn't on nixpkgs as a regular package.
 			pdm
 
+			# Another python build tool, written in rust.
+			uv
+
 		];
 
 		# https://nix-community.github.io/home-manager/options.xhtml#opt-programs.pyenv.enable
@@ -25,8 +28,14 @@
 
 			basePkg = pypkg:
 				pypkg.withPackages(pypkgs: with pypkgs; [
+
+					# Core functionality.
 					pip
 					virtualenv
+
+					# Additional tooling.
+					(import ./pkg-chorelib.nix { inherit pkgs pypkgs; })
+
 				]);
 
 		in {
