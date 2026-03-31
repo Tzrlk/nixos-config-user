@@ -1,23 +1,12 @@
-{ pkgs, ... }: {
-
+{ ... }: {
 	imports = [
 		./cloud
+		./codegen
 		./data
-		./editorconfig.nix
+		./docs
 		./git
 		./jetbrains
-		./pandoc.nix
 		./vim
 		./vscode
 	];
-
-	config = {
-
-		home.packages = with pkgs; [
-			antlr4_12
-			nixd
-		];
-
-	};
-
 }

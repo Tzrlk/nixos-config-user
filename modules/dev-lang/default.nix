@@ -5,6 +5,7 @@
 		./java
 		./k8s
 		./kotlin
+		./nix
 		./nodejs
 		./python
 		./ruby
