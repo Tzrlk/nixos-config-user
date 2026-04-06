@@ -2,11 +2,10 @@
 
 	imports = [
 		./edge
-		./gnome-keyring
 		./gpg
-		./keepass
 		./nixos
 		./podman
+		./secrets
 		./shell
 		./ssh
 		./taskwarrior
