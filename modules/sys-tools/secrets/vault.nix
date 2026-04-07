@@ -66,6 +66,26 @@ in {
 		++ optionals vsh.enable [ vsh.package ]
 		++ optionals hcp.enable [ hcp.package ];
 
+		home.file = {
+
+			# Vault CLI config file.
+			".vault".text = concatStringsSep "\n" [
+				"token_helper = \"${config.xdg.dataHome}/bin/vault-libsecret\""
+				""
+			];
+
+		};
+
+		xdg.dataFile = {
+
+			# Token helper script.
+			"bin/vault-libsecret" = {
+				source     = ./vault-libsecret.sh;
+				executable = true;
+			};
+
+		};
+
 	};
 
 }
