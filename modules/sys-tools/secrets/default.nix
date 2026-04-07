@@ -4,15 +4,17 @@
 		./gnome-keyring.nix
 		./keepass.nix
 		./libsecret.nix
+		./vault.nix
 	];
 
 	config = {
 		programs = {
 			keepassxc.enable = true;
-			# libsecret is always enabled.
+			# vault is usage-specific, so don't enable by default.
 		};
 		services = {
 			gnome-keyring.enable = true;
+			# libsecret is always enabled.
 		};
 	};
 
