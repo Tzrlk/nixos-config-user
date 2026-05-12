@@ -1,12 +1,14 @@
-{ config, pkgs, inputs, system, ... }: {
+{ config, pkgs, lib, inputs, system, ... }: with lib; {
 
-	options.programs.idea-ultimate = with pkgs.lib; mkOption {
+	options.programs.idea-ultimate = mkOption {
 		description = concatStringsSep "" [
 			"Local configuration for installation of IntelliJ IDEA Ultimate."
 		];
 		default = {};
 		type    = types.submodule ({ ... }: {
 			options = {
+
+				enable = mkEnableOption "idea-ultimate";
 
 				vmoptions = mkOption {
 					description = concatStringsSep "" [
@@ -26,30 +28,12 @@
 					];
 					type = with types; listOf str;
 					default = [
-						"com.intellij.kubernetes"
-						"com.intellij.properties"
-						"com.intellij.swagger"
 						"Docker"
 						"name.kropp.intellij.makefile"
-						"net.sjrx.intellij.plugins.systemdunitfiles"
 						"nix-idea"
 						"org.editorconfig.editorconfigjetbrains"
-						"org.intellij.plugins.hcl"
-						"org.jetbrains.idea.maven"
-						"org.jetbrains.kotlin"
-						"org.jetbrains.plugins.github"
-						"org.jetbrains.plugins.remote-run"
-						"org.jetbrains.plugins.rest"
-						"org.jetbrains.plugins.ruby"
-						"org.jetbrains.plugins.ruby-chef"
 						"org.jetbrains.plugins.terminal"
 						"org.jetbrains.plugins.yaml"
-						"org.jetbrains.security.package-checker"
-						"org.sonarlint.idea"
-						"org.toml.lang"
-						"PythonCore"
-						"Pythonid"
-						"ru.adelf.idea.dotenv"
 					];
 				};
 
@@ -74,7 +58,7 @@
 		# TODO: Get this from the package.
 		idea_edition = "IntelliJIdea2025.2";
 
-	in {
+	in mkIf cfg.enable {
 
 		# Add our package to the remote list.
 		programs.jetbrains-remote.ides = [ idea-ultimate ];
@@ -88,7 +72,7 @@
 			"idea64.vmoptions" = {
 				enable = cfg.vmoptions != null;
 				target = "JetBrains/${idea_edition}/idea64.vmoptions";
-				text   = pkgs.lib.concatStringsSep "\n" cfg.vmoptions;
+				text   = concatStringsSep "\n" cfg.vmoptions;
 			};
 
 		};
