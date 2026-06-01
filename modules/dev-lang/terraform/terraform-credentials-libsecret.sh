@@ -1,49 +1,70 @@
 #!/usr/bin/env bash
-set -e
+# A credential helper script designed to integrate Terraform auth with
+# libsecret. Reference docs for TF credential helpers available at:
+# https://developer.hashicorp.com/terraform/internals/credentials-helpers
 
-echo >&2 "Running ${0} ${*}"
+set -e
 
 # Capture script args to array so we can index properly.
 argv=("${@}")
 
-# Get the terraform-provided arguments from the end (reverse order).
-target="${argv[-1]}"; unset 'argv[-1]'
-action="${argv[-1]}"; unset 'argv[-1]'
+echo >&2 "Running ${0} ${*}"
+case "${#argv[@]}" in
+	3)
+		userid="${argv[1]}";
+		action="${argv[2]}";
+		target="${argv[3]}";
+		;;
+	2)
+		userid="unspecified";
+		action="${argv[1]}";
+		target="${argv[2]}";
+		;;
+	*)
+		echo >&2 "Invalid number of arguments provided."
+		exit 2
+		;;
+esac
 
 # Add necessary locating attributes to provided ones.
 # Be careful that input args are pairs, since we don't validate.
-argv+=(
-	service terraform
-	server  "${target}"
+attrs=(
+	service  terraform
+	server   "${target}"
+	username "${userid}"
 )
 
 case "${action}" in
 
 	# https://developer.hashicorp.com/terraform/internals/credentials-helpers#get-retrieve-the-credentials-for-the-given-hostname
 	get)
-		if token="$(secret-tool lookup "${argv[@]}")"; then
+		echo >&2 "Looking up existing token for ${target}..."
+		if token="$(secret-tool lookup "${attrs[@]}")"; then
 			# Using jq here to avoid any string escaping issues.
 			jq -n '{ token: $token }' --arg token "${token}"
 		else
+			echo >&2 'No entry found.'
 			printf '{}\n'
 		fi
 		;;
 
 	# https://developer.hashicorp.com/terraform/internals/credentials-helpers#store-store-new-credentials-for-the-given-hostname
 	store)
+		echo >&2 "Storing new token for ${target}..."
 		jq -r '.token' | secret-tool store \
 			--label="Terraform: ${target}" \
-			"${argv[@]}"
+			"${attrs[@]}"
 		;;
 
 	# https://developer.hashicorp.com/terraform/internals/credentials-helpers#forget-delete-any-stored-credentials-for-the-given-hostname
 	forget)
+		echo >&2 "Clearing token for ${target}..."
 		secret-tool clear \
-			"${argv[@]}"
+			"${attrs[@]}"
 		;;
 
 	*)
-		printf >&2 'The specified action is invalid.\n'
-		exit 1
+		echo >&2 "The specified action (${action}) is invalid."
+		exit 2
 
 esac
