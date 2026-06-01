@@ -6,7 +6,7 @@
 		home.packages = with pkgs; [
 
 			# Because it isn't on nixpkgs as a regular package.
-			pdm
+#			pdm
 
 			# Another python build tool, written in rust.
 			uv
@@ -47,10 +47,10 @@
 			};
 
 			# Specific versions needed for annoying tools.
-			"python-3.10" = {
-				target = "pyenv/versions/3.10";
-				source = basePkg pkgs.python310;
-			};
+#			"python-3.10" = {
+#				target = "pyenv/versions/3.10";
+#				source = basePkg pkgs.python310;
+#			};
 
 		};
 
