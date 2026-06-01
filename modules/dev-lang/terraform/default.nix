@@ -6,7 +6,7 @@
 		home.packages = with pkgs; [
 
 			# Terraform config synthesis
-			cdktf-cli
+			cdktn-cli
 
 			# The official CLI
 			terraform

@@ -14,7 +14,7 @@
 
 			# Now-deprecated default config.
 			enableDefaultConfig = false;
-			matchBlocks."*"     = {
+			settings."*"     = {
 				forwardAgent        = false;
 				addKeysToAgent      = "no";
 				compression         = false;
