@@ -1,8 +1,7 @@
 { ... }: {
 
 	imports = [
-		./idea-ultimate.nix
-		./remote.nix
+		./idea.nix
 		./toolbox.nix
 	];
 
@@ -10,7 +9,7 @@
 
 		programs = {
 
-			idea-ultimate = {
+			idea = {
 				enable = true;
 				plugins = [
 					"com.euphoricity.gitignore"
@@ -35,7 +34,7 @@
 					"org.jetbrains.plugins.rest"
 					"org.jetbrains.plugins.ruby"
 					"org.jetbrains.plugins.ruby-chef"
-					"org.jetbrains.plugins.terminal"
+#					"org.jetbrains.plugins.terminal"
 					"org.jetbrains.plugins.yaml"
 					"org.jetbrains.security.package-checker"
 					"org.sonarlint.idea"
@@ -45,6 +44,15 @@
 					"Pythonid"
 					"ru.adelf.idea.dotenv"
 				];
+			};
+
+			# Each IDE can be added in its own setup section.
+			jetbrains-remote = {
+				enable = false;
+			};
+
+			jetbrains-toolbox = {
+				enable = false;
 			};
 
 		};
