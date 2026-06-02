@@ -23,8 +23,8 @@
 
 		# Laziness
 		amend = "commit --amend --no-edit";
-		remain = ''!git reset-from main && !git checkout main'';
-		jenk  = "!git add Jenkinsfile && !git amend && !git push -f";
+		remain = ''!git reset-from main && git checkout main'';
+		jenk  = "!git add Jenkinsfile && git amend && git push -f";
 
 	};
 
