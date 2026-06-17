@@ -22,8 +22,8 @@
 			modeline = true;
 
 			# Mouse (https://vimdoc.sourceforge.net/htmldoc/options.html#'mouse')
-			mouse = "a"; # all modes
-			mousehide = true;
+			mouse      = "a"; # all modes
+			mousehide  = true;
 			mousemodel = "popup_setpos";
 
 		};

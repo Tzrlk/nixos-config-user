@@ -1,21 +1,44 @@
-{ pkgs, ... }: {
-
-	imports = [
-		./bash.nix
-		./blesh.nix
-		./starship.nix
-	];
-
-	config = {
-
-		home.packages = with pkgs; [
-			shellcheck
-		];
-
-	};
+{ ... }: {
 
 	# TODO:
 	# * https://github.com/Bash-it/bash-it
 	# * https://github.com/ohmybash/oh-my-bash
+
+	imports = [
+		./blesh.nix
+	];
+
+	config = {
+
+		home = {
+			shell.enableBashIntegration = true;
+			file = {
+				".bashrc.d" = {
+					source = ./.bashrc.d;
+					recursive = true;
+				};
+			};
+		};
+
+		programs.bash = {
+			enable = true;
+			enableVteIntegration = true;
+
+			historyControl = [ "erasedups" ];
+			historyIgnore = [
+				"cd"
+				"exit"
+				"ls"
+			];
+
+			# All shells.
+			bashrcExtra = builtins.readFile ./bashrc.sh;
+
+			# Login shells.
+			profileExtra = builtins.readFile ./profile.sh;
+
+		};
+
+	};
 
 }

@@ -34,7 +34,6 @@
 					"org.jetbrains.plugins.rest"
 					"org.jetbrains.plugins.ruby"
 					"org.jetbrains.plugins.ruby-chef"
-#					"org.jetbrains.plugins.terminal"
 					"org.jetbrains.plugins.yaml"
 					"org.jetbrains.security.package-checker"
 					"org.sonarlint.idea"
