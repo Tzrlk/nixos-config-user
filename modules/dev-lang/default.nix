@@ -3,6 +3,7 @@
 		./bash
 		./dotnet
 		./golang
+		./groovy
 		./java
 		./k8s
 		./kotlin
