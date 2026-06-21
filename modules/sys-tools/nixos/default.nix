@@ -10,7 +10,7 @@
 
 			# Make sure we have the currently included version of system
 			# manager available.
-			inputs.system-manager.packages.${system}.default
+			#inputs.system-manager.packages.${system}.default
 
 		];
 

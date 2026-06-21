@@ -47,10 +47,7 @@
 
 	in {
 		overlays.default = self.overlays.${system};
-		nixosModules.default = self.nixosModules.${system};
-		homeConfigurations.default = self.homeConfigurations.${system};
-
-	} // flake-utils.lib.eachDefaultSystem (system: {
+		homeModules.default = self.nixosModules.${system};
 
 		#######################################################################
 		# Expose overlays
@@ -58,11 +55,11 @@
 
 		#######################################################################
 		# Exposing the config directly as modules.
-		nixosModules = ./modules;
+		homeModules = ./modules;
 
 		#######################################################################
 		defaultTemplate = self.templates.nixos;
 		templates = ./templates;
 
-	});
+	};
 }
