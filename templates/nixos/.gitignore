@@ -1,0 +1,9 @@
+# Misc
+*.log
+
+# Nix
+/result
+
+# IntelliJ
+.idea/
+*.iml

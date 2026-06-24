@@ -43,16 +43,7 @@
 		home-manager,
 		...
 	}: let
-
-		# Resolve any local overrides.
-		locals =
-			if builtins.pathExists ./locals.nix
-			then import ./locals.nix
-			else {};
-		system = locals.system
-			or (builtins.head inputs.system);
-		username = locals.username
-			or "nixos";
+		system = builtins.head inputs.system;
 
 	in {
 		overlays.default = self.overlays.${system};
@@ -70,27 +61,8 @@
 		nixosModules = ./modules;
 
 		#######################################################################
-		# Home configs for applying config directly.
-		homeConfigurations = home-manager.lib.homeManagerConfiguration {
-			pkgs = import nixpkgs {
-				inherit system;
-				config.allowUnfree = true;
-			};
-			modules = [
-				./modules
-				({ ... }: {
-					home = {
-						stateVersion  = "25.05";
-						username      = username;
-						homeDirectory = "/home/${username}";
-					};
-				})
-			];
-			extraSpecialArgs = {
-				inherit inputs;
-				inherit system;
-			};
-		};
+		defaultTemplate = self.templates.nixos;
+		templates = ./templates;
 
 	});
 }
