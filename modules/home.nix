@@ -1,6 +1,8 @@
 { ... }: {
 	config = {
 
+		fonts.fontconfig.enable = true;
+
 		home = {
 
 			preferXdgDirectories = true;
