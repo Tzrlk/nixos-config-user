@@ -1,4 +1,5 @@
-{}: final: prev: {}
-	// import ./allow-unfree.nix final prev
-	// import ./allow-unfree-jetbrains.nix final prev
-	// import ./git-libsecret.nix final prev
+final: prev: prev.lib.composeManyExtensions [
+  import ./allow-unfree
+  import ./allow-unfree-jetbrains
+  import ./git-libsecret
+]

@@ -8,10 +8,6 @@
 		nix-flake-tests.url = "github:antifuchs/nix-flake-tests";
 		flake-parts.url = "github:hercules-ci/flake-parts";
 
-		flake-utils = {
-			url = "github:numtide/flake-utils";
-			inputs.systems.follows = "systems";
-		};
 		home-manager = {
 			url = "github:nix-community/home-manager";
 			inputs.nixpkgs.follows = "nixpkgs";
@@ -27,39 +23,96 @@
 			inputs.nixpkgs.follows = "nixpkgs";
 		};
 
-		# Only used to add the system manager tool to the user path, not to
-		# actually build any config.
-		system-manager = {
-			url = "github:numtide/system-manager/main";
-			inputs.nixpkgs.follows = "nixpkgs";
-		};
-
 	};
 
-	outputs = inputs @ {
- 		self,
- 		nixpkgs,
- 		flake-utils,
-		home-manager,
-		...
-	}: let
-		system = builtins.head inputs.system;
+	outputs = inputs @ { self, nixpkgs, flake-parts, ... }:
+	  # https://flake.parts/module-arguments.html
+	  flake-parts.lib.mkFlake { inherit inputs; } (top @ { config, withSystem, moduleWithSystem, ... }: {
+      systems = import inputs.systems;
 
-	in {
-		overlays.default = self.overlays.${system};
-		homeModules.default = self.nixosModules.${system};
+      imports = [
+      ];
 
-		#######################################################################
-		# Expose overlays
-		overlays = import ./overlays {};
+      flake = {
 
-		#######################################################################
-		# Exposing the config directly as modules.
-		homeModules = ./modules;
+        ## OVERLAYS ##############################################################
+        overlays = {
+          default                = import ./overlays;
+          allow-unfree           = import ./overlays/allow-unfree.nix;
+          allow-unfree-jetbrains = import ./overlays/allow-unfree-jetbrains.nix;
+          git-libsecret          = import ./overlays/git-libsecret.nix;
+        };
 
-		#######################################################################
-		defaultTemplate = self.templates.nixos;
-		templates = ./templates;
+        ## MODULES ###############################################################
+        homeModules = {
+          default     = ./home;
+          dev-lang    = ./home/dev-lang;
+          bash        = ./home/dev-lang/bash;
+          dotnet      = ./home/dev-lang/dotnet;
+          golang      = ./home/dev-lang/golang;
+          groovy      = ./home/dev-lang/groovy;
+          java        = ./home/dev-lang/java;
+          k8s         = ./home/dev-lang/k8s;
+          kotlin      = ./home/dev-lang/kotlin;
+          nix         = ./home/dev-lang/nix;
+          nodejs      = ./home/dev-lang/nodejs;
+          python      = ./home/dev-lang/python;
+          ruby        = ./home/dev-lang/ruby;
+          scala       = ./home/dev-lang/scala;
+          terraform   = ./home/dev-lang/terraform;
+          dev-tools   = ./home/dev-tools;
+          cloud       = ./home/dev-tools/cloud;
+          codegen     = ./home/dev-tools/codegen;
+          data        = ./home/dev-tools/data;
+          docs        = ./home/dev-tools/docs;
+          git         = ./home/dev-tools/git;
+          jetbrains   = ./home/dev-tools/jetbrains;
+          vim         = ./home/dev-tools/vim;
+          vscode      = ./home/dev-tools/vscode;
+          sys-tools   = ./home/sys-tools;
+          edge        = ./home/sys-tools/edge;
+          gpg         = ./home/sys-tools/gpg;
+          nixos       = ./home/sys-tools/nixos;
+          podman      = ./home/sys-tools/podman;
+          scripts     = ./home/sys-tools/scripts;
+          secrets     = ./home/sys-tools/secrets;
+          shell       = ./home/sys-tools/shell;
+          ssh         = ./home/sys-tools/ssh;
+          taskwarrior = ./home/sys-tools/taskwarrior;
+          xdg         = ./home/sys-tools/xdg;
+          less        = ./home/sys-tools/less.nix;
+          man         = ./home/sys-tools/man.nix;
+        };
 
-	};
+        ## TEMPLATES #############################################################
+        defaultTemplate = self.templates.nixos;
+        templates       = {
+
+          nixos = {
+            path        = ./templates/nixos;
+            description = "NixOS and Home manager config";
+          };
+
+          ubuntu-wsl = {
+            path        = ./templates/ubuntu-wsl;
+            description = "System and Home manager config for Ubuntu in WSL2";
+          };
+
+        };
+
+      };
+
+      perSystem = { pkgs, ... }: {
+
+        ## CHECKS ################################################################
+        checks = {
+        };
+
+        ## FORMATTER #############################################################
+        formatter = pkgs.nixfmt-rfc-style; # Most "official" formatter.
+
+      };
+
+	  });
+
 }

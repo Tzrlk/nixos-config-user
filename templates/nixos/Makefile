@@ -1,86 +1,94 @@
 #!/usr/bin/env make
 
-ROOT_DIR := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
+## LOCAL OVERRIDES ############################################################
+# Include all available local config overrides.
+ifneq ($(wildcard local.mk),)
+	include local.mk
+endif
 
-USER ?= $(error 'USER needs to be set in the environment')
-NAME ?= $(shell hostname)
-
-CMD_NIX ?= nix \
-	--extra-experimental-features 'flakes nix-command' \
-	--accept-flake-config
-CMD_HOME_MANAGER ?= $(shell command -v home-manager \
-	|| echo "${CMD_NIX} run 'github:nix-community/home-manager' --")
-
-FILES_HOME  := $(shell find ./home -type f)
-FILES_NIXOS := $(shell find ./nixos -type f)
-FILES_UTILS := $(shell find ./utils -type f)
-
-debug:
-	@echo "home-manager: ${CMD_HOME_MANAGER}"
-
-## MAIN #######################################################################
-
-flake-%: .ALWAYS
-	${CMD_NIX} flake ${*} \
-		$(if ${INPUT_CONFIG_USER},--override-input config-user ${INPUT_CONFIG_USER})
-flake: \
-	flake-show \
-	.ALWAYS
-check: \
-	flake-check \
-	.ALWAYS
-show: \
-	flake-show \
-	.ALWAYS
-
-home-%: .ALWAYS
-	@${CMD_HOME_MANAGER} ${*} \
-		--option accept-flake-config true \
-		$(if ${INPUT_CONFIG_USER},--override-input config-user ${INPUT_CONFIG_USER}) \
-		--flake .\#${USER} \
-		--show-trace
-home: \
-	home-switch \
-	.ALWAYS
-
-###############################################################################
-
-## CHECK ######################################################################
-
-#: Runs flake tests and assertions.
-flake-check: flake.lock
-	@${CMD_NIX} flake check
-.PHONY: check
-
-###############################################################################
-
-## SETUP ######################################################################
-
-setup: \
-		/home/${USER}/.vimrc \
-		| /home/${USER}/.config/home-manager/ \
-		/home/${USER}/.local/state/nix/profiles/
-.PHONY: setup
-
-/home/${USER}/.config/home-manager/: \
-		| /home/${USER}/.config/
-	@ln -s "${ROOT_DIR}" "/home/${USER}/.config/home-manager"
-
-/home/${USER}/.config/:
-	@mkdir -p ${@}
-
-/home/${USER}/.local/state/nix/profiles/:
-	@mkdir -p ${@}
-
-# Make config more editable.
-/home/${USER}/.vimrc:
-	@ln -sf '${ROOT_DIR}/home/vim/.vimrc' '${@}'
-
-###############################################################################
-
-## META #######################################################################
+## MAKE SETTINGS ##############################################################
 .ONESHELL:
 .ALWAYS:
 MAKEFLAGS += --no-builtin-rules
 MAKEFLAGS += --no-builtin-variables
-###############################################################################
+
+## COMMAND DEFINITIONS ########################################################
+CMD_NIX    ?= nix
+CMD_NIXOS  ?= nixos-rebuild
+CMD_HOME   ?= $(shell command -v home-manager \
+	|| echo "${CMD_NIX} run 'github:nix-community/home-manager' --")
+CMD_SYSTEM ?= $(shell command -v system-manager \
+	|| echo "${CMD_NIX} run 'github:numtide/system-manager' --")
+
+## ENVIRONMENT SETTINGS #######################################################
+
+USER   ?= $(error 'USER needs to be set in the environment')
+NAME   ?= $(shell hostname)
+SYSTEM ?= x86_64-linux
+
+INPUT_OVERRIDES := \
+$(if ${INPUT_NIXPKGS},--override-input nixpkgs ${LOCAL_NIXPKGS},) \
+$(if ${INPUT_NIXOS_CONFIG_USER},--override-input nixos-config-user ${INPUT_NIXOS_CONFIG_USER},) \
+$(if ${INPUT_NIXOS_CONFIG_WSL},--override-input nixos-config-wsl ${INPUT_NIXOS_CONFIG_WSL},)
+
+NIX_OPTS := ${INPUT_OVERRIDES} \
+--extra-experimental-features 'nix-command flakes' \
+--accept-flake-config \
+--impure
+
+## DIRS #######################################################################
+.build/:
+	@mkdir -p ${@}
+
+## SHOW ######################################################################
+show:
+	@${CMD_NIX} flake show ${FLAKE_OPTS}
+.PHONY: show
+
+## CHECK #####################################################################
+#: Run flake validation and tests.
+check:
+	@${CMD_NIX} flake check ${FLAKE_OPTS} \
+		--keep-going
+.PHONY: check
+
+## FORMAT ####################################################################
+#: Autoformats the code
+format:
+	${CMD_NIX} fmt
+.PHONY: format
+
+## REPL ######################################################################
+#: Opens a repl in the flake context.
+repl:
+	@${CMD_NIX} repl . ${NIX_OPTS}
+.PHONY: repl
+
+##############################################################################
+## NIXOS #####################################################################
+#: Apply the current nixos configuration.
+nixos:
+	@${CMD_NIXOS} switch ${NIX_OPTS} \
+		--accept-flake-config \
+		--flake ".#${HOSTNAME}" \
+		--sudo
+.PHONY: nixos
+
+##############################################################################
+## HOME ######################################################################
+#: Apply the current home-manager configuration.
+home:
+	@${CMD_HOME} switch ${INPUT_OVERRIDES} \
+		--option accept-flake-config true \
+		--flake .\#${USER} \
+		--show-trace
+.PHONY: home
+
+##############################################################################
+## SYSTEM ####################################################################
+#: Apply the current system-manager configuration.
+system:
+	@sudo ${CMD_SYSTEM} switch ${INPUT_OVERRIDES} \
+		--nix-option accept-flake-config true \
+		--flake .\#${NAME}
+.PHONY: system
