@@ -1,17 +1,17 @@
 { ... }: {
-	imports = [
-		./bash
-		./dotnet
-		./golang
-		./groovy
-		./java
-		./k8s
-		./kotlin
-		./nix
-		./nodejs
-		./python
-		./ruby
-		./scala
-		./terraform
-	];
+  flake.homeModules = {
+		bash      = ./bash;
+		dotnet    = ./dotnet;
+		golang    = ./golang;
+		groovy    = ./groovy;
+		java      = ./java;
+		k8s       = ./k8s;
+		kotlin    = ./kotlin;
+		nix       = ./nix;
+		nodejs    = ./nodejs;
+		python    = ./python;
+		ruby      = ./ruby;
+		scala     = ./scala;
+		terraform = ./terraform;
+	};
 }

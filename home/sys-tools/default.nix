@@ -1,39 +1,17 @@
 { pkgs, ... }: {
-
-	imports = [
-		./edge
-		./gpg
-		./nixos
-		./podman
-		./secrets
-		./shell
-		./ssh
-		./taskwarrior
-		./xdg
-		./less.nix
-		./man.nix
-	];
-
-	config = {
-
-		home.packages = with pkgs; [
-			curl
-
-			# Provide better unicode support for symbols.
-			noto-fonts
-			noto-fonts-color-emoji
-			noto-fonts-monochrome-emoji
-			unifont
-			vista-fonts
-
-		];
-
-		home.file = {
-			# Misc scripts. Maybe this should be in xdg or outputs?
-			# TODO: Look into programs.script-directory.
-			"scripts".source = ./scripts;
-		};
-
-	};
-
+  flake.homeModules = {
+		edge        = ./edge;
+		gpg         = ./gpg;
+		nixos       = ./nixos;
+		podman      = ./podman;
+		scripts     = ./scripts;
+		secrets     = ./secrets;
+		shell       = ./shell;
+		ssh         = ./ssh;
+		taskwarrior = ./taskwarrior;
+		xdg         = ./xdg;
+		fonts       = ./fonts.nix;
+		less        = ./less.nix;
+		man         = ./man.nix;
+  };
 }
