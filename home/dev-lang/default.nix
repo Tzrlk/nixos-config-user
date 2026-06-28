@@ -1,4 +1,7 @@
 { ... }: {
+  imports = [
+    ./nix
+  ];
   flake.homeModules = {
 		bash      = ./bash;
 		dotnet    = ./dotnet;
@@ -7,7 +10,6 @@
 		java      = ./java;
 		k8s       = ./k8s;
 		kotlin    = ./kotlin;
-		nix       = ./nix;
 		nodejs    = ./nodejs;
 		python    = ./python;
 		ruby      = ./ruby;

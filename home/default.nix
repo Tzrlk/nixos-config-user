@@ -2,6 +2,7 @@
   imports = [
     ./dev-lang
     ./dev-tools
+    ./gui-tools
     ./sys-tools
   ];
   flake.homeModules = {

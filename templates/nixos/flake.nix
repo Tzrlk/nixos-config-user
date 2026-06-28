@@ -22,7 +22,7 @@
 			inputs.nixpkgs.follows = "nixpkgs";
 		};
 
-		# Ugh
+		# Transitives
 		nixpkgs-ruby = {
 			url = "github:bobvanderlinden/nixpkgs-ruby";
 			inputs.nixpkgs.follows = "nixpkgs";
