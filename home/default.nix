@@ -1,4 +1,4 @@
-{ self, flake-parts-lib, withSystem, ... }: {
+{ self, ... }: {
   imports = [
     ./dev-lang
     ./dev-tools
@@ -6,12 +6,12 @@
     ./sys-tools
   ];
   flake.homeModules = {
-    home = import ./home;
+    home = import ./home.nix;
 
     # By default, include every _other_ defined module.
     default = { ... }: {
       imports = builtins.attrValues
-        (builtins.removeAttrs
+        (removeAttrs
           self.homeModules
           [ "default" ]);
     };

@@ -1,7 +1,6 @@
-{ self, ... }: {
+{ ... }: {
   imports = [
+    ./kate
+    ./nix-gui.nix
   ];
-  flake.homeModules = {
-    nix-gui = ./nix-gui.nix;
-  };
 }

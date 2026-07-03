@@ -1,35 +1,47 @@
-{ pkgs, ... }: {
+{ ... }: {
 
-	imports = [
-		./aliases.nix
-		./commands.nix
-		./display.nix
-		./security.nix
-	];
+  flake.overlays.git-libsecret = final: prev: {
 
-	config = let
+    git = prev.git.override {
+      withLibsecret = true;
+    };
 
-		package = pkgs.git.override { # Might need to do this with an overlay.
-			withLibsecret = true;
-		};
+  };
 
-	in {
-		programs.git = {
-			enable = true;
-			inherit package;
+  flake.homeModules.git = { pkgs, ... }: {
 
-			lfs.enable = true;
+    imports = [
+      ./aliases.nix
+      ./commands.nix
+      ./display.nix
+      ./security.nix
+    ];
 
-			settings = {
-				user.name = "Peter Cummuskey";
-				i18n.filesEncoding = "utf-8";
-				core = {
-					eol = "lf"; # Replaces autocrlf="input"
-					ignoreCase = false;
-				};
-			};
+    config = let
 
-		};
-	};
+      package = pkgs.git.override { # Might need to do this with an overlay.
+        withLibsecret = true;
+      };
+
+    in {
+      programs.git = {
+        enable = true;
+        inherit package;
+
+        lfs.enable = true;
+
+        settings = {
+          user.name = "Peter Cummuskey";
+          i18n.filesEncoding = "utf-8";
+          core = {
+            eol = "lf"; # Replaces autocrlf="input"
+            ignoreCase = false;
+          };
+        };
+
+      };
+    };
+
+  };
 
 }

@@ -11,12 +11,14 @@
  * ## TODO
  * [ ] Implement as nixos and/or system module.
  */
-{ pkgs, inputs, system, ... }: {
-  config = {
+{ inputs, ... }: {
+  flake.homeModules.nh = { pkgs, ... }: {
+    config = {
 
-    home.packages = with pkgs; [
-      inputs.nh.packages.${system}.default
-    ];
+      home.packages = with pkgs; [
+        inputs.nh.packages.${system}.default
+      ];
 
+    };
   };
 }

@@ -1,14 +1,15 @@
 { self, ... }: {
-  flake.defaultTemplate = self.templates.nixos;
   flake.templates = {
 
+    default = self.templates.nixos;
+
     nixos = {
-      path        = ./templates/nixos;
+      path        = ./nixos;
       description = "NixOS and Home manager config";
     };
 
     ubuntu-wsl = {
-      path        = ./templates/ubuntu-wsl;
+      path        = ./ubuntu-wsl;
       description = "System and Home manager config for Ubuntu in WSL2";
     };
 

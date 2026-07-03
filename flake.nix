@@ -81,7 +81,7 @@
       ];
 
       perSystem = { pkgs, ... }: {
-        formatter = pkgs.nixfmt-rfc-style; # Most "official" formatter.
+        formatter = pkgs.nixfmt; # Most "official" formatter.
       };
 
 	  });
