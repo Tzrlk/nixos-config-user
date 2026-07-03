@@ -76,6 +76,7 @@
         home-manager.flakeModules.home-manager
         ./checks
         ./home
+        ./lib
         ./overlays
         ./templates
       ];

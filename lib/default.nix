@@ -1,4 +1,4 @@
-{ self, ... }: {
+{ self, lib, ... }: {
 
   # This exposes the overlay to add all these general functions to nixpkgs.lib;
   flake.overlays.lib = final: prev: prev // {
@@ -13,7 +13,7 @@
   };
 
   # All general functions.
-  flake.lib = {
+  flake.lib = with lib; {
 
     /**
      * Creates an attribute set with only one entry.
@@ -22,6 +22,13 @@
     soloAttr = name: body: {
       ${name} = body;
     };
+
+    /**
+     * Makes it a tiny bit easier to define option sets.
+     */
+    mkOptions = opts: types.submodule ({ ... }: {
+      options = opts;
+    });
 
   };
 

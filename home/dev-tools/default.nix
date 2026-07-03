@@ -1,14 +1,14 @@
 { ... }: {
   imports = [
     ./jetbrains
+    ./git
   ];
   flake.homeModules = {
-    cloud     = ./cloud;
-    codegen   = ./codegen;
-    data      = ./data;
-    docs      = ./docs;
-    git       = ./git;
-    vim       = ./vim;
-    vscode    = ./vscode;
+    cloud   = ./cloud;
+    codegen = ./codegen;
+    data    = ./data;
+    docs    = ./docs;
+    vim     = ./vim;
+    vscode  = ./vscode;
   };
 }

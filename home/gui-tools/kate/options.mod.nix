@@ -2,6 +2,7 @@
   _config = config;
   _kate   = _config.programs.kate;
 
+  # TODO: Somehow get mkOptions injected into lib.
   mkOptions = opts: types.submodule ({ ... }: {
     options = opts;
   });
@@ -32,7 +33,7 @@
 
     servers = mkOption {
       description = "Custom LSP server config.";
-      type        = types.nullOr types.attrListOf optsKateLspServer;
+      type        = types.nullOr types.attrsOf optsKateLspServer;
       default     = null;
     };
 
@@ -44,13 +45,13 @@
 
     katerc = mkOption {
       description = "Kate config";
-      type        = types.nullOr (types.attrOf (types.attrsOf types.any));
+      type        = types.nullOr (types.attrsOf (types.attrsOf types.anything));
       default     = null;
     };
 
     katevirc  = mkOption {
       description = "VI-mode config";
-      type        = types.nullOr (types.attrsOf (types.attrsOf types.any));
+      type        = types.nullOr (types.attrsOf (types.attrsOf types.anything));
       default     = null;
     };
 
