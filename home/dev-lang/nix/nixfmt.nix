@@ -1,10 +1,10 @@
 { pkgs, ... }: {
-	config = {
+  config = {
 
-	  # Nix formatter.
-		home.packages = with pkgs; [
-			nixfmt
-		];
+    # Nix formatter.
+    home.packages = with pkgs; [
+      nixfmt
+    ];
 
-	};
+  };
 }

@@ -1,11 +1,11 @@
 { pkgs, ... }: {
-	config = {
+  config = {
 
-		home.packages = with pkgs; [
-			libsecret
-		];
+    home.packages = with pkgs; [
+      libsecret
+    ];
 
-		# TODO: Configure core libsecret integration?
+    # TODO: Configure core libsecret integration?
 
-	};
+  };
 }

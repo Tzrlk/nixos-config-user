@@ -1,5 +1,5 @@
 { ... }: {
-	imports = [
-		./sbt.nix
-	];
+  imports = [
+    ./sbt.nix
+  ];
 }

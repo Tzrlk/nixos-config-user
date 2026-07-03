@@ -1,10 +1,10 @@
 { pkgs, ... }: {
-	config = {
+  config = {
 
     # Nix doc generation
-		home.packages = with pkgs; [
-			nixdoc
-		];
+    home.packages = with pkgs; [
+      nixdoc
+    ];
 
-	};
+  };
 }

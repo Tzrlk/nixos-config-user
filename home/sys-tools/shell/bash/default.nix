@@ -1,44 +1,44 @@
 { ... }: {
 
-	# TODO:
-	# * https://github.com/Bash-it/bash-it
-	# * https://github.com/ohmybash/oh-my-bash
+  # TODO:
+  # * https://github.com/Bash-it/bash-it
+  # * https://github.com/ohmybash/oh-my-bash
 
-	imports = [
-		./blesh.nix
-	];
+  imports = [
+    ./blesh.nix
+  ];
 
-	config = {
+  config = {
 
-		home = {
-			shell.enableBashIntegration = true;
-			file = {
-				".bashrc.d" = {
-					source = ./.bashrc.d;
-					recursive = true;
-				};
-			};
-		};
+    home = {
+      shell.enableBashIntegration = true;
+      file = {
+        ".bashrc.d" = {
+          source = ./.bashrc.d;
+          recursive = true;
+        };
+      };
+    };
 
-		programs.bash = {
-			enable = true;
-			enableVteIntegration = true;
+    programs.bash = {
+      enable = true;
+      enableVteIntegration = true;
 
-			historyControl = [ "erasedups" ];
-			historyIgnore = [
-				"cd"
-				"exit"
-				"ls"
-			];
+      historyControl = [ "erasedups" ];
+      historyIgnore = [
+        "cd"
+        "exit"
+        "ls"
+      ];
 
-			# All shells.
-			bashrcExtra = builtins.readFile ./bashrc.sh;
+      # All shells.
+      bashrcExtra = builtins.readFile ./bashrc.sh;
 
-			# Login shells.
-			profileExtra = builtins.readFile ./profile.sh;
+      # Login shells.
+      profileExtra = builtins.readFile ./profile.sh;
 
-		};
+    };
 
-	};
+  };
 
 }

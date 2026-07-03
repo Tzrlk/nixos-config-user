@@ -1,32 +1,43 @@
-{ config, pkgs, lib, ... }: with lib; {
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib;
+{
 
-	options.programs.powershell = mkOption {
-		description = concatStringsSep "" [
-			"Powershell installation config."
-		];
-		type = types.submodule ({ ... }: {
-			options = {
+  options.programs.powershell = mkOption {
+    description = concatStringsSep "" [
+      "Powershell installation config."
+    ];
+    type = types.submodule (
+      { ... }: {
+        options = {
 
-				enable = mkEnableOption "powershell";
+          enable = mkEnableOption "powershell";
 
-			};
-		});
-		default = {};
-	};
+        };
+      }
+    );
+    default = { };
+  };
 
-	config = let
+  config =
+    let
 
-		cfg = config.programs.powershell;
+      cfg = config.programs.powershell;
 
-	in mkIf cfg.enable {
+    in
+    mkIf cfg.enable {
 
-		home.packages = with pkgs; [
-			powershell
-			powershell-editor-services
-		];
+      home.packages = with pkgs; [
+        powershell
+        powershell-editor-services
+      ];
 
-		# TODO: profile config.
+      # TODO: profile config.
 
-	};
+    };
 
 }

@@ -1,19 +1,19 @@
 { inputs, system, ... }: {
 
-	imports = [
-		./settings.nix
-	];
+  imports = [
+    ./settings.nix
+  ];
 
-	config = {
+  config = {
 
-		home.packages = [
+    home.packages = [
 
-			# Make sure we have the currently included version of system
-			# manager available.
-			#inputs.system-manager.packages.${system}.default
+      # Make sure we have the currently included version of system
+      # manager available.
+      #inputs.system-manager.packages.${system}.default
 
-		];
+    ];
 
-	};
+  };
 
 }

@@ -1,13 +1,13 @@
 { ... }: {
-	imports = [
+  imports = [
 
-		# Shells
-		./bash
-		./nushell
-		./powershell
+    # Shells
+    ./bash
+    ./nushell
+    ./powershell
 
-		# Extensions
-		./starship.nix
+    # Extensions
+    ./starship.nix
 
-	];
+  ];
 }

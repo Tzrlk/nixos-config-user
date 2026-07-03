@@ -1,39 +1,39 @@
 {
-	description = "NixOS User Configuration";
+  description = "NixOS User Configuration";
 
-	nixConfig = {
+  nixConfig = {
     substituters = [ "https://watersucks.cachix.org" ];
     trusted-public-keys = [
       "watersucks.cachix.org-1:6gadPC5R8iLWQ3EUtfu3GFrVY7X6I4Fwz/ihW25Jbv8="
     ];
-	};
+  };
 
-	inputs = {
+  inputs = {
 
     # Utils
-		systems.url = "github:nix-systems/x86_64-linux";
-		flake-parts.url = "github:hercules-ci/flake-parts";
-		nix-flake-tests.url = "github:antifuchs/nix-flake-tests";
+    systems.url = "github:nix-systems/x86_64-linux";
+    flake-parts.url = "github:hercules-ci/flake-parts";
+    nix-flake-tests.url = "github:antifuchs/nix-flake-tests";
     git-hooks = {
       url = "github:cachix/git-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-		nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
     # Tools
-		home-manager = {
-			url = "github:nix-community/home-manager";
-			inputs.nixpkgs.follows = "nixpkgs";
-		};
-		nix-gui = {
-		  url = "github:nix-gui/nix-gui";
-		  inputs.nixpkgs.follows = "nixpkgs";
-		};
-		optnix = {
-		  url = "sourcehut:~watersucks/optnix";
-		  inputs.nixpkgs.follows = "nixpkgs";
-		};
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nix-gui = {
+      url = "github:nix-gui/nix-gui";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    optnix = {
+      url = "sourcehut:~watersucks/optnix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nix-tree = {
       url = "github:utdemir/nix-tree";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -56,35 +56,44 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-		# Resources
-		nixpkgs-ruby = {
-			url = "github:bobvanderlinden/nixpkgs-ruby";
-			inputs.nixpkgs.follows = "nixpkgs";
-		};
-		nix-jetbrains-plugins = {
-			url = "github:theCapypara/nix-jetbrains-plugins";
-			inputs.nixpkgs.follows = "nixpkgs";
-		};
+    # Resources
+    nixpkgs-ruby = {
+      url = "github:bobvanderlinden/nixpkgs-ruby";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nix-jetbrains-plugins = {
+      url = "github:theCapypara/nix-jetbrains-plugins";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
-	};
+  };
 
-	outputs = inputs @ { self, flake-parts, home-manager, ... }:
-	  flake-parts.lib.mkFlake { inherit inputs; } (top @ { config, ... }: {
-      systems = import inputs.systems;
+  outputs =
+    inputs@{
+      self,
+      flake-parts,
+      home-manager,
+      ...
+    }:
+    flake-parts.lib.mkFlake { inherit inputs; } (
+      top@{ config, ... }:
+      {
+        systems = import inputs.systems;
 
-      imports = [
-        home-manager.flakeModules.home-manager
-        ./checks
-        ./home
-        ./lib
-        ./overlays
-        ./templates
-      ];
+        imports = [
+          home-manager.flakeModules.home-manager
+          ./checks
+          ./home
+          ./lib
+          ./overlays
+          ./templates
+        ];
 
-      perSystem = { pkgs, ... }: {
-        formatter = pkgs.nixfmt-tree; # Most "official" formatter.
-      };
+        perSystem = { pkgs, ... }: {
+          formatter = pkgs.nixfmt-tree; # Most "official" formatter.
+        };
 
-	  });
+      }
+    );
 
 }

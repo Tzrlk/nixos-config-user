@@ -1,22 +1,22 @@
 { pkgs, ... }: {
 
-	config = {
+  config = {
 
-		home.packages = with pkgs; [
+    home.packages = with pkgs; [
 
-			# Fast Node Manager (nvm but faster).
-			fnm
+      # Fast Node Manager (nvm but faster).
+      fnm
 
-		];
+    ];
 
-		home.file = {
+    home.file = {
 
-			".bashrc.d/fnm-init.sh" = {
-				source = ./fnm-init.sh;
-			};
+      ".bashrc.d/fnm-init.sh" = {
+        source = ./fnm-init.sh;
+      };
 
-		};
+    };
 
-	};
+  };
 
 }

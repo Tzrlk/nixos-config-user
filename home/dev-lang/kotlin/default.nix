@@ -1,21 +1,21 @@
 { pkgs, ... }: {
 
-	config = {
-		home.packages = with pkgs; [
+  config = {
+    home.packages = with pkgs; [
 
-			# Base kotlin compiler & tools
-			kotlin
+      # Base kotlin compiler & tools
+      kotlin
 
-			# Official kotlin repl
-			kotlin-interactive-shell
+      # Official kotlin repl
+      kotlin-interactive-shell
 
-			# LSP for kotlin
-			kotlin-language-server
+      # LSP for kotlin
+      kotlin-language-server
 
-			# Compile kotlin to native binaries.
-			kotlin-native
+      # Compile kotlin to native binaries.
+      kotlin-native
 
-		];
-	};
+    ];
+  };
 
 }

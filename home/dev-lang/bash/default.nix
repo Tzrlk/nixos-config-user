@@ -1,18 +1,18 @@
 { config, pkgs, ... }: {
 
-	config = {
-		home.packages = with pkgs; [
+  config = {
+    home.packages = with pkgs; [
 
-			# linting
-			shellcheck
+      # linting
+      shellcheck
 
-			# TODO: Investigate
-#			bashdb
-#			bashly
-#			bashate
-#			bashunit
+      # TODO: Investigate
+      #			bashdb
+      #			bashly
+      #			bashate
+      #			bashunit
 
-		];
-	};
+    ];
+  };
 
 }

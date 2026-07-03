@@ -1,34 +1,34 @@
 { ... }: {
-	programs.vim = {
+  programs.vim = {
 
-		settings = {
+    settings = {
 
-			# Display
-			background     = "dark";
-			number         = true;
-			relativenumber = false;
+      # Display
+      background = "dark";
+      number = true;
+      relativenumber = false;
 
-			# Storage
-			backupdir = [ "~/.vim/backup/" ];
-			directory = [ "~/.vim/swap/" ];
-			undodir   = [ "~/.vim/undo/" ];
+      # Storage
+      backupdir = [ "~/.vim/backup/" ];
+      directory = [ "~/.vim/swap/" ];
+      undodir = [ "~/.vim/undo/" ];
 
-			# Indent
-			expandtab  = false;
-			shiftwidth = 4;
-			tabstop    = 4;
+      # Indent
+      expandtab = false;
+      shiftwidth = 4;
+      tabstop = 4;
 
-			# Control
-			modeline = true;
+      # Control
+      modeline = true;
 
-			# Mouse (https://vimdoc.sourceforge.net/htmldoc/options.html#'mouse')
-			mouse      = "a"; # all modes
-			mousehide  = true;
-			mousemodel = "popup_setpos";
+      # Mouse (https://vimdoc.sourceforge.net/htmldoc/options.html#'mouse')
+      mouse = "a"; # all modes
+      mousehide = true;
+      mousemodel = "popup_setpos";
 
-		};
+    };
 
-		extraConfig = builtins.readFile ./.vimrc;
+    extraConfig = builtins.readFile ./.vimrc;
 
-	};
+  };
 }

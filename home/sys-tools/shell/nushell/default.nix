@@ -1,21 +1,28 @@
-{ config, pkgs, lib, ... }: let
-	_config   = config;
-	_programs = _config.programs;
-	_nushell  = _programs.nushell;
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+let
+  _config = config;
+  _programs = _config.programs;
+  _nushell = _programs.nushell;
 
-in {
+in
+{
 
-	imports = [
-		./integrations.nix
-		./plugins.nix
-	];
+  imports = [
+    ./integrations.nix
+    ./plugins.nix
+  ];
 
-	# Only configure NuShell if it's actually enabled.
-	config = lib.mkIf _nushell.enable {
+  # Only configure NuShell if it's actually enabled.
+  config = lib.mkIf _nushell.enable {
 
-		programs.nushell = {
-		};
+    programs.nushell = {
+    };
 
-	};
+  };
 
 }

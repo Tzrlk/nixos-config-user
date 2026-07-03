@@ -1,42 +1,42 @@
 { pkgs, ... }: {
 
-	config = {
+  config = {
 
-		# TODO: Terraform providers?
-		home.packages = with pkgs; [
+    # TODO: Terraform providers?
+    home.packages = with pkgs; [
 
-			# Terraform config synthesis
-			cdktn-cli
+      # Terraform config synthesis
+      cdktn-cli
 
-			# The official CLI
-			terraform
+      # The official CLI
+      terraform
 
-			# Documentation generation
-			terraform-docs
+      # Documentation generation
+      terraform-docs
 
-			# Official language server
-			terraform-ls
+      # Official language server
+      terraform-ls
 
-			# Tool for handling complex projects
-			terragrunt
+      # Tool for handling complex projects
+      terragrunt
 
-			# Linting tool + rulesets.
-			tflint
-			tflint-plugins.tflint-ruleset-aws
+      # Linting tool + rulesets.
+      tflint
+      tflint-plugins.tflint-ruleset-aws
 
-			# Tool for handling complex migrations
-			tfmigrate
+      # Tool for handling complex migrations
+      tfmigrate
 
-		];
+    ];
 
-		# Enable libsecret integration via secret-tool.
-		home.file = {
-			".local/bin/terraform-credentials-libsecret" = {
-				source = ./terraform-credentials-libsecret.sh;
-				executable = true;
-			};
-		};
+    # Enable libsecret integration via secret-tool.
+    home.file = {
+      ".local/bin/terraform-credentials-libsecret" = {
+        source = ./terraform-credentials-libsecret.sh;
+        executable = true;
+      };
+    };
 
-	};
+  };
 
 }

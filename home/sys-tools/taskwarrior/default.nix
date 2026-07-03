@@ -1,7 +1,13 @@
-{ config, pkgs, lib, ... }: {
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+{
 
-	programs.taskwarrior = {
-		enable = false; # TODO
-	};
+  programs.taskwarrior = {
+    enable = false; # TODO
+  };
 
 }

@@ -12,9 +12,9 @@
 
       # This input has a fairly hard package dependency on python39, which
       # isn't in nixpkgs any more.
-#      home.packages = with pkgs; [
-#        inputs.nix-gui.packages.${system}.nix-gui
-#      ];
+      #      home.packages = with pkgs; [
+      #        inputs.nix-gui.packages.${system}.nix-gui
+      #      ];
 
     };
   };

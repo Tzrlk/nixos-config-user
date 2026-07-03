@@ -1,22 +1,22 @@
 { config, pkgs, ... }: {
 
-	config = {
+  config = {
 
-		home.packages = with pkgs; [
+    home.packages = with pkgs; [
 
-			# Make sure we have a groovy sdk available.
-			groovy
+      # Make sure we have a groovy sdk available.
+      groovy
 
-			# Also grab an LSP for extra inspections.
-			groovy-language-server
+      # Also grab an LSP for extra inspections.
+      groovy-language-server
 
-		];
+    ];
 
-		# Put the groovy library code somewhere the IDE can use it.
-		xdg.dataFile = {
-			groovy.source = "${pkgs.groovy}";
-		};
+    # Put the groovy library code somewhere the IDE can use it.
+    xdg.dataFile = {
+      groovy.source = "${pkgs.groovy}";
+    };
 
-	};
+  };
 
 }

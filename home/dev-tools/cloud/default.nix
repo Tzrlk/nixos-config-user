@@ -1,6 +1,6 @@
 { ... }: {
-	imports = [
-		./aws.nix
-		./azure.nix
-	];
+  imports = [
+    ./aws.nix
+    ./azure.nix
+  ];
 }

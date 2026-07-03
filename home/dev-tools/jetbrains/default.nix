@@ -1,12 +1,12 @@
 { ... }: {
   imports = [
-		./idea.nix
+    ./idea.nix
   ];
 
   flake.overlays.allow-unfree-jetbrains = final: prev: {
     config = prev.config // {
 
-      allowUnfreeList = (prev.config.allowUnfreeList or []) ++ [
+      allowUnfreeList = (prev.config.allowUnfreeList or [ ]) ++ [
         "idea"
         "idea-with-plugins"
         "jetbrains-toolbox"

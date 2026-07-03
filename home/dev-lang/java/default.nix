@@ -1,16 +1,22 @@
-{ config, pkgs, lib, ... }: {
-	config = {
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+{
+  config = {
 
-		# TODO: JBang
+    # TODO: JBang
 
-		programs.java = {
-			enable = false; # TODO
-			package = pkgs.jdk;
-		};
+    programs.java = {
+      enable = false; # TODO
+      package = pkgs.jdk;
+    };
 
-		home.sessionVariables = {
+    home.sessionVariables = {
 
-		};
+    };
 
-	};
+  };
 }

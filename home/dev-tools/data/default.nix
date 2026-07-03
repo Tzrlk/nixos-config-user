@@ -1,27 +1,34 @@
-{ config, pkgs, lib, ... }: let
-	qq = pkgs.callPackage ./qq.nix {};
-in {
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+let
+  qq = pkgs.callPackage ./qq.nix { };
+in
+{
 
-	config = {
+  config = {
 
-		home.packages = with pkgs; [
+    home.packages = with pkgs; [
 
-			# https://github.com/wader/fq
-			fq
+      # https://github.com/wader/fq
+      fq
 
-			jq
-			jq-lsp
+      jq
+      jq-lsp
 
-			qq
+      qq
 
-		];
+    ];
 
-		programs.jq = {
-			enable = true;
-			package = pkgs.jq;
-#			colors = null;
-		};
+    programs.jq = {
+      enable = true;
+      package = pkgs.jq;
+      #			colors = null;
+    };
 
-	};
+  };
 
 }

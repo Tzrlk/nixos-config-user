@@ -1,10 +1,10 @@
 { pkgs, ... }: {
-	config = {
+  config = {
 
     # Nix LSP
-		home.packages = with pkgs; [
-			nixd
-		];
+    home.packages = with pkgs; [
+      nixd
+    ];
 
-	};
+  };
 }

@@ -1,7 +1,7 @@
 { ... }: {
 
-	programs.vscode = {
-		enable = false; # TODO
-	};
+  programs.vscode = {
+    enable = false; # TODO
+  };
 
 }
