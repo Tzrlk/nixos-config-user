@@ -82,7 +82,7 @@
       ];
 
       perSystem = { pkgs, ... }: {
-        formatter = pkgs.nixfmt; # Most "official" formatter.
+        formatter = pkgs.nixfmt-tree; # Most "official" formatter.
       };
 
 	  });

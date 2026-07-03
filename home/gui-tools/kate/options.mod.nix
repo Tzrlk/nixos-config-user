@@ -1,30 +1,36 @@
-{ config, lib, ... }: with lib; let
+{ config, lib, ... }:
+with lib;
+let
   _config = config;
-  _kate   = _config.programs.kate;
+  _kate = _config.programs.kate;
 
   # TODO: Somehow get mkOptions injected into lib.
-  mkOptions = opts: types.submodule ({ ... }: {
-    options = opts;
-  });
+  mkOptions =
+    opts:
+    types.submodule (
+      { ... }: {
+        options = opts;
+      }
+    );
 
   optsKateLspServer = mkOptions {
 
     command = mkOption {
       description = "The command & args needed to run the server.";
-      type        = types.listOf types.str;
-      example     = [ "nixd" ];
+      type = types.listOf types.str;
+      example = [ "nixd" ];
     };
 
     url = mkOption {
       description = "Reference url for server.";
-      type        = types.nullOr types.str;
-      example     = "https://github.com/nix-community/nixd";
+      type = types.nullOr types.str;
+      example = "https://github.com/nix-community/nixd";
     };
 
     highlightingModeRegex = mkOption {
       description = "?";
-      type        = types.nullOr types.str;
-      example     = "^Nix$";
+      type = types.nullOr types.str;
+      example = "^Nix$";
     };
 
   };
@@ -33,42 +39,43 @@
 
     servers = mkOption {
       description = "Custom LSP server config.";
-      type        = types.nullOr types.attrsOf optsKateLspServer;
-      default     = null;
+      type = types.nullOr types.attrsOf optsKateLspServer;
+      default = null;
     };
 
   };
 
   optsKate = mkOptions {
-    enable  = mkEnableOption "kate";
-    package = mkPackageOption pkgs "kate" {};
+    enable = mkEnableOption "kate";
+    package = mkPackageOption pkgs "kate" { };
 
     katerc = mkOption {
       description = "Kate config";
-      type        = types.nullOr (types.attrsOf (types.attrsOf types.anything));
-      default     = null;
+      type = types.nullOr (types.attrsOf (types.attrsOf types.anything));
+      default = null;
     };
 
-    katevirc  = mkOption {
+    katevirc = mkOption {
       description = "VI-mode config";
-      type        = types.nullOr (types.attrsOf (types.attrsOf types.anything));
-      default     = null;
+      type = types.nullOr (types.attrsOf (types.attrsOf types.anything));
+      default = null;
     };
 
     lsp = mkOption {
       description = "LSP server config.";
-      type        = types.nullOr optsKateLsp;
-      default     = null;
+      type = types.nullOr optsKateLsp;
+      default = null;
     };
 
   };
 
-in {
+in
+{
 
   options.programs.kate = mkOption {
     description = "GUI text editor for KDE.";
-    type        = optsKate;
-    default     = {};
+    type = optsKate;
+    default = { };
   };
 
 }

@@ -4,11 +4,11 @@
     ./git
   ];
   flake.homeModules = {
-    cloud   = ./cloud;
+    cloud = ./cloud;
     codegen = ./codegen;
-    data    = ./data;
-    docs    = ./docs;
-    vim     = ./vim;
-    vscode  = ./vscode;
+    data = ./data;
+    docs = ./docs;
+    vim = ./vim;
+    vscode = ./vscode;
   };
 }
