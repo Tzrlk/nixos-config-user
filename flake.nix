@@ -2,24 +2,31 @@
   description = "NixOS User Configuration";
 
   nixConfig = {
-    substituters = [ "https://watersucks.cachix.org" ];
-    trusted-public-keys = [
-      "watersucks.cachix.org-1:6gadPC5R8iLWQ3EUtfu3GFrVY7X6I4Fwz/ihW25Jbv8="
-    ];
+    #    substituters = [ "https://watersucks.cachix.org" ];
+    #    trusted-public-keys = [
+    #      "watersucks.cachix.org-1:6gadPC5R8iLWQ3EUtfu3GFrVY7X6I4Fwz/ihW25Jbv8="
+    #    ];
   };
 
   inputs = {
 
-    # Utils
+    # Flake Utils
     systems.url = "github:nix-systems/x86_64-linux";
     flake-parts.url = "github:hercules-ci/flake-parts";
     nix-flake-tests.url = "github:antifuchs/nix-flake-tests";
+    nixtest.url = "gitlab:TECHNOFAB/nixtest?dir=lib";
+
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+
+    # Complex utils
+    treefmt-nix = {
+      url = "github:numtide/treefmt-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     git-hooks = {
       url = "github:cachix/git-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
     # Tools
     home-manager = {
@@ -69,31 +76,30 @@
   };
 
   outputs =
-    inputs@{
-      self,
-      flake-parts,
-      home-manager,
-      ...
-    }:
-    flake-parts.lib.mkFlake { inherit inputs; } (
-      top@{ config, ... }:
-      {
-        systems = import inputs.systems;
+    inputs@{ self, flake-parts, ... }:
+    flake-parts.lib.mkFlake { inherit inputs; } {
+      systems = import inputs.systems;
 
-        imports = [
-          home-manager.flakeModules.home-manager
-          ./checks
-          ./home
-          ./lib
-          ./overlays
-          ./templates
-        ];
+      imports = [
+        ./home
+        ./lib
+        ./overlays
+        ./templates
+        ./tooling
+      ];
 
-        perSystem = { pkgs, ... }: {
-          formatter = pkgs.nixfmt-tree; # Most "official" formatter.
+      perSystem = { system, ... }: {
+
+        # Consistent 'pkgs' flake module argument across systems.
+        _module.args.pkgs = import inputs.nixpkgs {
+          inherit system;
+          overlays = [
+            #            self.overlays.lib
+          ];
         };
 
-      }
-    );
+      };
+
+    };
 
 }

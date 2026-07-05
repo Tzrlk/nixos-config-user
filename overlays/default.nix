@@ -4,8 +4,16 @@
     allow-unfree = import /allow-unfree.nix;
 
     default =
-      final: prev:
-      prev.lib.composeManyExtensions (builtins.attrValues (removeAttrs self.overlays [ "default" ]));
+      let
+
+        # Exclude self from full overlays to avoid infinite recursion.
+        withoutSelf = removeAttrs self.overlays [ "default" ];
+
+        # Extract only the module values from the result.
+        asList = builtins.attrValues withoutSelf;
+
+      in
+      final: prev: prev.lib.composeManyExtensions asList;
 
   };
 }

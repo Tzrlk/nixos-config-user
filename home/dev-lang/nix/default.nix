@@ -1,7 +1,7 @@
 { ... }: {
   imports = [
     ./dix.nix
-    ./manix.nix
+#    ./manix.nix
     ./nh.nix
     ./nix-output-monitor.nix
     ./nix-tree.nix
@@ -11,6 +11,5 @@
     nix-du = ./nix-du.nix;
     nixd = ./nixd.nix;
     nixdoc = ./nixdoc.nix;
-    nixfmt = ./nixfmt.nix;
   };
 }

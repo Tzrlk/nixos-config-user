@@ -1,4 +1,0 @@
-{ ... }: {
-  perSystem.checks = {
-  };
-}

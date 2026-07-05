@@ -27,9 +27,9 @@ NAME   ?= $(shell hostname)
 SYSTEM ?= x86_64-linux
 
 INPUT_OVERRIDES := \
-$(if ${INPUT_NIXPKGS},--override-input nixpkgs ${LOCAL_NIXPKGS},) \
-$(if ${INPUT_NIXOS_CONFIG_USER},--override-input nixos-config-user ${INPUT_NIXOS_CONFIG_USER},) \
-$(if ${INPUT_NIXOS_CONFIG_WSL},--override-input nixos-config-wsl ${INPUT_NIXOS_CONFIG_WSL},)
+$(if ${INPUT_NIXPKGS},--override-input nixpkgs "${INPUT_NIXPKGS}" ,) \
+$(if ${INPUT_NIXOS_CONFIG_USER},--override-input nixos-config-user "${INPUT_NIXOS_CONFIG_USER}" ,) \
+$(if ${INPUT_NIXOS_CONFIG_WSL},--override-input nixos-config-wsl "${INPUT_NIXOS_CONFIG_WSL}" ,)
 
 NIX_OPTS := ${INPUT_OVERRIDES} \
 --extra-experimental-features 'nix-command flakes' \
@@ -42,13 +42,13 @@ NIX_OPTS := ${INPUT_OVERRIDES} \
 
 ## SHOW ######################################################################
 show:
-	@${CMD_NIX} flake show ${FLAKE_OPTS}
+	@${CMD_NIX} flake show ${NIX_OPTS}
 .PHONY: show
 
 ## CHECK #####################################################################
 #: Run flake validation and tests.
 check:
-	@${CMD_NIX} flake check ${FLAKE_OPTS} \
+	${CMD_NIX} flake check ${NIX_OPTS} \
 		--keep-going
 .PHONY: check
 
@@ -71,6 +71,7 @@ docs:
 
 ##############################################################################
 ## NIXOS #####################################################################
+
 #: Apply the current nixos configuration.
 nixos:
 	@${CMD_NIXOS} switch ${NIX_OPTS} \
@@ -79,8 +80,16 @@ nixos:
 		--sudo
 .PHONY: nixos
 
+#: Build the current nixos configuration without applying.
+nixos-build:
+	@${CMD_NIXOS} build ${NIX_OPTS} \
+		--accept-flake-config \
+		--flake ".#${HOSTNAME}"
+.PHONY: nixos
+
 ##############################################################################
 ## HOME ######################################################################
+
 #: Apply the current home-manager configuration.
 home:
 	@${CMD_HOME} switch ${INPUT_OVERRIDES} \
@@ -89,11 +98,27 @@ home:
 		--show-trace
 .PHONY: home
 
+#: Build the current home-manager config without applying.
+home-build:
+	@${CMD_HOME} build ${INPUT_OVERRIDES} \
+		--option accept-flake-config true \
+		--flake .\#${USER} \
+		--show-trace
+.PHONY: home-build
+
 ##############################################################################
 ## SYSTEM ####################################################################
+
 #: Apply the current system-manager configuration.
 system:
 	@sudo ${CMD_SYSTEM} switch ${INPUT_OVERRIDES} \
+		--nix-option accept-flake-config true \
+		--flake .\#${NAME}
+.PHONY: system
+
+#: Build the current system-manager configuration without applying.
+system-build:
+	@sudo ${CMD_SYSTEM} build ${INPUT_OVERRIDES} \
 		--nix-option accept-flake-config true \
 		--flake .\#${NAME}
 .PHONY: system

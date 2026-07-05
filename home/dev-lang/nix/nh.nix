@@ -12,12 +12,18 @@
   [ ] Implement as nixos and/or system module.
 */
 { inputs, ... }: {
-  flake.homeModules.nh = { pkgs, ... }: {
+  flake.homeModules.nh = { config, pkgs, ... }: let
+    _config = config;
+
+  in {
     config = {
 
-      home.packages = with pkgs; [
-        inputs.nh.packages.${system}.default
-      ];
+      programs.nh = {
+        enable    = true;
+        package   = inputs.nh.packages.${pkgs.system}.default;
+        homeFlake = "${_config.xdg.configHome}/home-manager";
+        osFlake   = "/etc/nixos";
+      };
 
     };
   };

@@ -57,16 +57,16 @@
   };
 
   outputs =
-    inputs@{
-      self,
-      nixpkgs,
-      home-manager,
-      system-manager,
-      config-user,
-      config-wsl,
-      ...
-    }:
+    inputs@{ self, nixpkgs, ... }:
     let
+
+      inherit (inputs)
+        home-manager
+        system-manager
+        config-user
+        config-wsl
+        ;
+
       system = "x86_64-linux";
       username = "";
       hostname = "";
@@ -81,8 +81,7 @@
         modules = [
           config-wsl.nixosModules.${system}
           self.nixosModules.system
-          ({ ... }: {
-          })
+          ({ ... }: { })
         ];
         extraSpecialArgs = {
           inherit system;

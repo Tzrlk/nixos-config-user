@@ -46,14 +46,14 @@
   };
 
   outputs =
-    inputs@{
-      self,
-      nixpkgs,
-      home-manager,
-      config-user,
-      ...
-    }:
+    inputs@{ self, nixpkgs, ... }:
     let
+
+      inherit (inputs)
+        home-manager
+        config-user
+        ;
+
       system = "x86_64-linux";
       username = "";
       hostname = "";
