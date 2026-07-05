@@ -4,16 +4,17 @@
     ./git-hooks.nix
     ./treefmt.nix
   ];
-  perSystem = {
+  perSystem = { pkgs, ... }: {
 
     treefmt.programs.nixfmt = {
       enable = true;
-      #      package = pkgs.nixfmt;
+      package = pkgs.nixfmt;
     };
 
-    #    pre-commit.settings.hooks.nixpkgs-fmt = {
-    #      enable = true;
-    #    };
+    pre-commit.settings.hooks.nixpkgs-fmt = {
+      enable = true;
+      package = pkgs.nixfmt;
+    };
 
   };
 }
