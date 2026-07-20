@@ -8,6 +8,14 @@ trim_trailing_whitespace = true
 indent_style             = tab
 indent_size              = tab
 
+[.editorconfig]
+ij_editorconfig_align_group_field_declarations     = true
+ij_editorconfig_spaces_around_assignment_operators = true
+
 [*.{y,ya}ml]
+indent_style = space
+indent_size  = 2
+
+[*.nix]
 indent_style = space
 indent_size  = 2

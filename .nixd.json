@@ -1,0 +1,10 @@
+{
+	"nixpkgs": {
+		"expr": "import (builtins.getFlake (builtins.toString ./.)).inputs.nixpkgs {}"
+	},
+	"formatting": {
+		"command": [ "cat" ]
+	},
+	"options": {
+	}
+}
