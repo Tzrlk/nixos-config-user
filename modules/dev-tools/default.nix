@@ -3,6 +3,7 @@
 		./cloud
 		./codegen
 		./data
+		./database
 		./docs
 		./git
 		./jetbrains
