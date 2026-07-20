@@ -1,10 +1,10 @@
 { pkgs, ... }: {
 
 	imports = [
+		./containers
 		./edge
 		./gpg
 		./nixos
-		./podman
 		./secrets
 		./shell
 		./ssh

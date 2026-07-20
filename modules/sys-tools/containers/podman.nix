@@ -1,11 +1,10 @@
-{ pkgs, ... }: {
+{ config, pkgs, ... }: let
+	_config = config;
+in {
 
 	config = {
 
 		home.packages = with pkgs; [
-
-			# Docker compose but with podman.
-			podman-compose
 
 			# Used to handle uid/gid mapping.
 			# NOTE: Needs the following commands to be run after changing:
@@ -30,22 +29,6 @@
 			# https://nix-community.github.io/home-manager/options.xhtml#opt-services.podman.settings.containers
 			settings = {
 
-				# containers.conf configuration
-				containers = {
-					engine = {
-						compose_warning_logs = false;
-						compose_providers = [
-							"${pkgs.podman-compose}/bin/podman-compose"
-						];
-					};
-				};
-
-				# mounts.conf configuration
-	#			mounts = []; << missing
-
-				# storage.conf configuration
-				storage = {};
-
 				registries = {
 					search = [
 						"docker.io"
@@ -54,6 +37,31 @@
 
 			};
 
+		};
+
+		systemd.user.sockets.podman = {
+			Unit = {
+				Description = "Podman API Socket";
+			};
+			Socket = {
+				ListenStream = "%t/podman/podman.sock";
+				SocketMode = "0660";
+			};
+			Install = {
+				WantedBy = [ "sockets.target" ];
+			};
+		};
+
+		systemd.user.services.podman = {
+			Unit = {
+				Description = "Podman API Service";
+				Requires = [ "podman.socket" ];
+				After = [ "podman.socket" ];
+			};
+			Service = {
+				Type = "exec";
+				ExecStart = "${pkgs.podman}/bin/podman system service";
+			};
 		};
 
 	};
