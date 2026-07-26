@@ -7,6 +7,7 @@
 		systems.url = "github:nix-systems/x86_64-linux";
 		nix-flake-tests.url = "github:antifuchs/nix-flake-tests";
 		flake-parts.url = "github:hercules-ci/flake-parts";
+		fromJsonSchema.url = "github:friedow/fromJsonSchema";
 
 		flake-utils = {
 			url = "github:numtide/flake-utils";

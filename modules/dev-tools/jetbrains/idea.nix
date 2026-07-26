@@ -10,9 +10,9 @@
 in {
 
   options.programs.idea = mkOption {
-    description = concatStringsSep "" [
-      "Local configuration for installation of IntelliJ IDEA."
-    ];
+    description = ''
+      Local configuration for installation of IntelliJ IDEA.
+    '';
     type = types.submodule ({ ... }: {
       options = {
 
@@ -31,9 +31,9 @@ in {
         };
 
         plugins = mkOption {
-          description = concatStringsSep "" [
-            "IDs of the plugins to install with the IDE."
-          ];
+          description = ''
+            IDs of the plugins to install with the IDE.
+          '';
           type = with types; listOf str;
           default = [];
           example = [
