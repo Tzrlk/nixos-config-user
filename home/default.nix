@@ -11,7 +11,8 @@
 
     # By default, include every _other_ defined ;module.
     default = { ... }: {
-      imports = builtins.attrValues (removeAttrs self.homeModules [ "default" ]);
+      imports = builtins.attrValues (
+        removeAttrs self.homeModules [ "default" ]);
     };
 
   };

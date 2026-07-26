@@ -1,5 +1,5 @@
 # This just enables and configures nixfmt within treefmt-nix.
-{ pkgs, ... }: {
+{ ... }: {
   imports = [
     ./git-hooks.nix
     ./treefmt.nix

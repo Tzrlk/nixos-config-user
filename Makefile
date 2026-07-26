@@ -32,7 +32,6 @@ $(if ${INPUT_NIXOS_CONFIG_USER},--override-input nixos-config-user "${INPUT_NIXO
 $(if ${INPUT_NIXOS_CONFIG_WSL},--override-input nixos-config-wsl "${INPUT_NIXOS_CONFIG_WSL}" ,)
 
 NIX_OPTS := ${INPUT_OVERRIDES} \
---extra-experimental-features 'nix-command flakes' \
 --accept-flake-config \
 --impure
 
@@ -42,20 +41,20 @@ NIX_OPTS := ${INPUT_OVERRIDES} \
 
 ## SHOW ######################################################################
 show:
-	@${CMD_NIX} flake show ${NIX_OPTS}
+	@@${CMD_NIX} flake show ${NIX_OPTS}
 .PHONY: show
 
 ## CHECK #####################################################################
 #: Run flake validation and tests.
 check:
-	${CMD_NIX} flake check ${NIX_OPTS} \
+	@${CMD_NIX} flake check ${NIX_OPTS} \
 		--keep-going
 .PHONY: check
 
 ## FORMAT ####################################################################
 #: Autoformats the code
 format:
-	${CMD_NIX} fmt
+	@${CMD_NIX} fmt
 .PHONY: format
 
 ## REPL ######################################################################
@@ -66,7 +65,7 @@ repl:
 
 ## DOCS ######################################################################
 docs:
-	${CMD_NIXDOC}
+	@${CMD_NIXDOC}
 .PHONY: docs
 
 ##############################################################################
@@ -74,9 +73,9 @@ docs:
 
 #: Apply the current nixos configuration.
 nixos:
-	@${CMD_NIXOS} switch ${NIX_OPTS} \
+	${CMD_NIXOS} switch ${NIX_OPTS} \
 		--accept-flake-config \
-		--flake ".#${HOSTNAME}" \
+		--flake .#${NAME} \
 		--sudo
 .PHONY: nixos
 
@@ -84,8 +83,8 @@ nixos:
 nixos-build:
 	@${CMD_NIXOS} build ${NIX_OPTS} \
 		--accept-flake-config \
-		--flake ".#${HOSTNAME}"
-.PHONY: nixos
+		--flake .#${NAME}
+.PHONY: nixos-build
 
 ##############################################################################
 ## HOME ######################################################################
@@ -121,4 +120,4 @@ system-build:
 	@sudo ${CMD_SYSTEM} build ${INPUT_OVERRIDES} \
 		--nix-option accept-flake-config true \
 		--flake .\#${NAME}
-.PHONY: system
+.PHONY: system-build
