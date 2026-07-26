@@ -64,6 +64,10 @@
     };
 
     # Resources
+    erosanix = {
+      url = "github:emmanuelrosa/erosanix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nixpkgs-ruby = {
       url = "github:bobvanderlinden/nixpkgs-ruby";
       inputs.nixpkgs.follows = "nixpkgs";
