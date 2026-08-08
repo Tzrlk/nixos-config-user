@@ -5,9 +5,10 @@
     ./dev-tools
     ./gui-tools
     ./sys-tools
+    ./links.nix
   ];
   flake.homeModules = {
-    home = import ./home.nix;
+    home  = import ./home.nix;
 
     # By default, include every _other_ defined ;module.
     default = { ... }: {

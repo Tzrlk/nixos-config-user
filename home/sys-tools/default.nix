@@ -1,4 +1,7 @@
-{ pkgs, ... }: {
+{ ... }: {
+  imports = [
+    ./monitoring
+  ];
   flake.homeModules = {
     edge = ./edge;
     gpg = ./gpg;
