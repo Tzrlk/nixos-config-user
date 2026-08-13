@@ -1,4 +1,5 @@
-{ pkgs, ... }: {
+{ inputs, pkgs, ... }: {
+
 	config = {
 
 		home.packages = with pkgs; [
@@ -11,6 +12,9 @@
 
 			# Nix formatter
 			nixfmt
+
+			# Nix Typing
+			inputs.typenix.packages.${pkgs.system}.typenix
 
 		];
 

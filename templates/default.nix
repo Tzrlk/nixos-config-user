@@ -1,4 +1,6 @@
-{ ... }: {
+{ ... }: rec {
+
+  default = nixos;
 
   nixos = {
     path        = ./nixos;
