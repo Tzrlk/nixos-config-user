@@ -1,5 +1,5 @@
 { ... }: {
   imports = [
-    ./snowflake-cli.nix
+    ./snowflake-cli
   ];
 }
