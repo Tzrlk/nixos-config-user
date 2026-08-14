@@ -1,4 +1,4 @@
-{ config, lib, ... }: let
+{ config, pkgs, lib, ... }: let
   _config        = config;
   _snowflake-cli = _config.programs.snowflake-cli;
   inherit (lib)
@@ -12,7 +12,7 @@ in {
 
   options.programs.snowflake-cli = mkOption {
     description = "Command line client for the Snowflake database.";
-    type        = submodule (import ./opts.nix);
+    type        = submodule (args: import ./opts.nix (args // { inherit pkgs; }));
     default     = {};
   };
 

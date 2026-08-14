@@ -8,6 +8,8 @@
     mkEnableOption
     mkPackageOption
     mkIf;
+  inherit (lib.attrsets)
+    concatMapAttrs;
   inherit (builtins)
     fetchurl
     fromJSON
@@ -15,6 +17,14 @@
     readFile;
   inherit (inputs.fromJsonSchema.lib)
     fromJsonSchema;
+
+  configSchemaRef = {
+    "$schema" = "https://lnav.org/schemas/config-v1.schema.json";
+  };
+  formatSchemaRef = {
+    "$schema" = "https://lnav.org/schemas/format-v1.schema.json";
+  };
+
 in {
 
   options.programs.lnav = let
@@ -25,17 +35,9 @@ in {
       fromJSON
       fromJsonSchema
     ];
-
-    configSchemaRef = {
-      "$schema" = "https://lnav.org/schemas/config-v1.schema.json";
-    };
     configSchema = loadSchema {
       url    = configSchemaRef."$schema";
       sha256 = "";
-    };
-
-    formatSchemaRef = {
-      "$schema" = "https://lnav.org/schemas/format-v1.schema.json";
     };
     formatSchema = loadSchema {
       url    = formatSchemaRef."$schema";
@@ -72,7 +74,7 @@ in {
     });
   };
 
-  config = mkIf _inav.enable {
+  config = mkIf _lnav.enable {
 
     home.packages = [ _lnav.package ];
 
