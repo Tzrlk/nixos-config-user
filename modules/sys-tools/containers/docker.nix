@@ -1,5 +1,6 @@
-{ config, pkgs, ... }: let
+{ config, pkgs, lib, ... }: let
 	_config = config;
+	_docker-cli = _config.programs.docker-cli;
 in {
 
 	config = {
@@ -30,6 +31,8 @@ in {
 				};
 			};
 		};
+
+		home.file."${_docker-cli.configDir}/config.json".force = true;
 
 	};
 
