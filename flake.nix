@@ -53,15 +53,21 @@
     system = builtins.head inputs.system;
 
   in {
-    overlays.default = self.overlays.${system};
     nixosModules.default = self.nixosModules.${system};
     homeConfigurations.default = self.homeConfigurations.${system};
 
-  } // flake-utils.lib.eachDefaultSystem (system: {
-
     #######################################################################
     # Expose overlays
-    overlays = import ./overlays {};
+    overlays = {
+      default                = import ./overlays/default.nix;
+      allow-unfree           = import ./overlays/allow-unfree.nix;
+      allow-unfree-jetbrains = import ./overlays/allow-unfree-jetbrains.nix;
+      git-libsecret          = import ./overlays/git-libsecret.nix;
+      snowflake-cli          = import ./overlays/snowflake-cli.nix;
+      tflint                 = import ./overlays/tflint.nix;
+    };
+
+  } // flake-utils.lib.eachDefaultSystem (system: {
 
     #######################################################################
     # Exposing the config directly as modules.
