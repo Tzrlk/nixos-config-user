@@ -2,6 +2,7 @@
 	imports = [
 		./cloud
 		./codegen
+		./copilot
 		./data
 		./database
 		./docs
