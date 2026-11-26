@@ -5,6 +5,8 @@ ROOT_DIR := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 CMD_NIX ?= nix
 CMD_HOME_MANAGER ?= $(shell command -v home-manager \
 	|| echo "${CMD_NIX} run 'github:nix-community/home-manager' --")
+CMD_TYPENIX ?= $(shell command -v typenix \
+	|| echo "${CMD_NIX} run 'github:ryanrasti/typenix' --")
 
 SYSTEM ?= x86_64-linux
 
@@ -53,6 +55,11 @@ build: .ALWAYS
 
 switch: .ALWAYS
 	$(call .home,${@})
+
+## MISC #######################################################################
+
+lint: .ALWAYS
+	${CMD_TSLINT}
 
 ## SETUP ######################################################################
 
